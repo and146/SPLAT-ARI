@@ -1,0 +1,1080 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.5.0_16" class="java.beans.XMLDecoder"> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://byurakan.phys.uniroma1.it/cgi-bin/dfbs.cgi?n=ssa&amp;c=ssa&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://byurakan.phys.uniroma1.it/DFBS-ssa</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Dipartimento di Fisica, Universita&apos; La Sapienza</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://byurakan.phys.uniroma1.it/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>DFBS</string> 
+  </void> 
+  <void property="title"> 
+   <string>Digitized First Byurakan Survey</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://archive.stsci.edu/ssap/search.php?id=FUSE&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://mast.stsci.edu/ssap/fuse</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>MAST</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://archive.stsci.edu/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>FUSE</string> 
+  </void> 
+  <void property="title"> 
+   <string>Far Ultraviolet Spectroscopic Explorer</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://basebe.obspm.fr/cgi-bin/ssapBE01.pl?</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://basebe.obspm.fr/bess0.1</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Observatoire de Paris-Meudon -&gt; GEPI</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://basebe.obspm.fr</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>BeSS</string> 
+  </void> 
+  <void property="title"> 
+   <string>Be Stars Spectra database</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://www.g-vo.org/ssa/SSA?action=Query&amp;archiveid=ssa.service.cdfs&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://www.g-vo.org/ssa.service.cdfs</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>German Astrophysical Virtual Observatory</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://www.g-vo.org/ssa/SSA?action=Help</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>CDFS SSA</string> 
+  </void> 
+  <void property="title"> 
+   <string>SSA Service for Optical Spectroscopy in the CDF-S</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://leda.univ-lyon1.fr/G.cgi?c=ssa&amp;n=fassa&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://obs-lyon.fr/hfa/ssa</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>CRAL-Observatoire de Lyon</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://leda.univ-lyon1.fr</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>HFA</string> 
+  </void> 
+  <void property="title"> 
+   <string>HyperLeda FITS Archive Simple Spectrum Data Access(HFA SSA)</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://archive.stsci.edu/ssap/search.php?id=HST&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://mast.stsci/ssap/hst</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>MAST</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://archive.stsci.edu/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>HST Spectra</string> 
+  </void> 
+  <void property="title"> 
+   <string>Hubble Space Telescope Spectra</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://venus.ifca.unican.es:8080/SSAPXMS</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://uk.ac.le.star/ssap_temp_resource/axis</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>IFCA(CSIC-UC)</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>NOT PROVIDED</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>AXIS-SVO SSAP</string> 
+  </void> 
+  <void property="title"> 
+   <string>AXIS-XMS</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://vo.obspm.fr/cgi-bin/siap/ssapFUSE.pl?</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://iap.fr/FUSE/SSA</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Institut d&apos;Astrophysique de Paris (IAP)</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://fuse.iap.fr/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>FUSE SSA</string> 
+  </void> 
+  <void property="title"> 
+   <string>Far Ultraviolet Spectroscopic Explorer (Simple Spectrum Data Access)</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://archive.stsci.edu/ssap/search.php?id=HPOL&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://mast.stsci/ssap/hpol</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>MAST</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://archive.stsci.edu/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>HPOL</string> 
+  </void> 
+  <void property="title"> 
+   <string>Wisconsin Halfwave Spectropolarimeter</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://archive.stsci.edu/ssap/search.php?id=HUT&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://mast.stsci/ssap/hut</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>MAST</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://archive.stsci.edu/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>HUT</string> 
+  </void> 
+  <void property="title"> 
+   <string>Hopkins Ultraviolet  Telescope</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://basebe.obspm.fr/cgi-bin/ssapBE_1.0.pl</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://voparis.obspm.gepi/BeStars/BeSS/SSAP</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>GEPI-VOPARIS DATA CENTRE</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://basebe.obspm.fr</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>BeSS_SSAP</string> 
+  </void> 
+  <void property="title"> 
+   <string>Be Star Spectra SSAP</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://ov.inaoep.mx/tsap/SyntMod.php?FORMAT=METADATA&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://svo.iaa/models/SSP/Xray</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Instituto de Astrofísica de Andalucía</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://ov.inaoep.mx/pgos3/index.php</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>PGos3 X-ray SSP</string> 
+  </void> 
+  <void property="title"> 
+   <string>PGos3: X-ray SSP models</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://archive.eso.org/apps/ssaserver/EsoProxySsap?</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://archive.eso.org/ESO-SAF-SSAP</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>European Southern Observatory - Science Archive Facility</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://archive.eso.org/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>ESO SAF SSA</string> 
+  </void> 
+  <void property="title"> 
+   <string>ESO Science Archive Spectrum Service</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://archive.stsci.edu/ssap/search.php?id=EUVE&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://mast.stsci/ssap/euve</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>MAST</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://archive.stsci.edu/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>EUVE</string> 
+  </void> 
+  <void property="title"> 
+   <string>Extreme Ultraviolet Explorer Merged Spectra</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://archive.eso.org/bin/fos_ssap.pl?</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://stecf.euro-vo/SSA/HST/FOS</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Space Telescope European Coordinating Facility</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://www.stecf.org/poa/FOS/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>HST/FOS/SSAP</string> 
+  </void> 
+  <void property="title"> 
+   <string>Hubble Space Telescope Faint Object Spectrograph</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://www.laeff.inta.es/projects/svo/db2vo2/html/ssap.php?model=dusty00&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://svo.laeff/models/dusty00</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>INTA/LAEFF</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://svo.laeff.inta.es/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>DUSTY</string> 
+  </void> 
+  <void property="title"> 
+   <string>Allard, DUSTY 2000</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://vo.ari.uni-heidelberg.de/ssatr-0.01/ssatr?</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://www.g-vo.org/ssa.service.tmap</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>German Astrophysical Virtual Observatory</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://vo.ari.uni-heidelberg.de/ssatr-0.01/TmapArchiveInfo.html</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>GAVO TMAP-SSA</string> 
+  </void> 
+  <void property="title"> 
+   <string>SSA Service for Synthetical Spectra (TMAP)</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://vo.obspm.fr/cgi-bin/siap/ssapHFA.pl?</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://obspm.fr/HyperLeda/SSA</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Observatoire de Paris</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://vo.obspm.fr/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>HFA SSA</string> 
+  </void> 
+  <void property="title"> 
+   <string>HyperLeda FITS Archive Simple Spectrum Data Access</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://www.laeff.inta.es/projects/svo/theory/db2vo2/html/ssap.php?model=cond00</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://svo.laeff/models/cond00</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>INTA/LAEFF</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://svo.laeff.inta.es/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>COND 2000</string> 
+  </void> 
+  <void property="title"> 
+   <string>Allard, COND 2000</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://lamwws.oamp.fr/DAL/SSA/CENCOS-vvds_deep.do</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://fr.oamp.lam/ssa/cencos-vvds_deep</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Laboratoire d&apos;Astrophysique de Marseille - Departement d&apos;informatique      scientifique</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://cencos.oamp.fr/VVDS/VVDS_DEEP.html</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>CENCOS-VVDS_DEEP</string> 
+  </void> 
+  <void property="title"> 
+   <string>CENCOS-VVDS_DEEP SSA (VVDS Deep survey)</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://www.laeff.inta.es/projects/svo/theory/db2vo2/html/ssap.php?model=dalessio&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://svo.laeff/models/dalessio</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>INTA/LAEFF</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://www.dias.ie/protostars/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>Dalessio</string> 
+  </void> 
+  <void property="title"> 
+   <string>Dalessio disk models</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://vo.obspm.fr/cgi-bin/siap/ssapHIGI.pl?</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://obspm.fr/SSA_HIG</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Observatoire de Paris</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://klun.obs-nancay.fr/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>HiG SSA</string> 
+  </void> 
+  <void property="title"> 
+   <string>HiG - Simple Spectral Access to HI (21cm) Spectra of Galaxies</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://archive.stsci.edu/ssap/search.php?id=WUPPE&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://mast.stsci/ssap/wuppe</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>MAST</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://archive.stsci.edu/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>WUPPE</string> 
+  </void> 
+  <void property="title"> 
+   <string>Wisconsin Ultraviolet Photo-Polarimeter Experiment</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://www.laeff.inta.es/projects/svo/theory/db2vo2/html/ssap.php?model=nextgen&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://svo.laeff/models/nextgen</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>INTA/LAEFF</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://svo.laeff.inta.es/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>Allard, NextGen</string> 
+  </void> 
+  <void property="title"> 
+   <string>Allard, NextGen</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://obelix.lambrate.inaf.it/vodb/SSA?CAT=VVDS_F02_DEEP&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://obelix.lambrate.inaf.it/vodb/ssa/VVDS_F02_DEEP</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>INAF-IASF Milano</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://cencosw.oamp.fr</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>VVDS_F02_DEEP</string> 
+  </void> 
+  <void property="title"> 
+   <string>VVDS-F02 DEEP spectra</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://www.laeff.inta.es/projects/svo/theory/db2vo2/html/ssap.php?model=coelho&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://svo.laeff/models/coelho</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>INTA/LAEFF</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://svo.laeff.inta.es/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>Coelho</string> 
+  </void> 
+  <void property="title"> 
+   <string>Coelho Synthetic stellar library</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="2"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://atlas.obs-hp.fr/elodie/E.cgi?a=t&amp;c=ssa&amp;n=ssa&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+    <void index="1"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://atlas.obs-hp.fr/elodie</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://obs-hp.fr/elodie/ssa</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Observatoire de Haute-Provence</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://atlas.obs-hp.fr/elodie</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>ELODIE</string> 
+  </void> 
+  <void property="title"> 
+   <string>ELODIE archive</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://archive.stsci.edu/ssap/search.php?id=IUE&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://mast.stsci.edu/ssap/iue</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>MAST</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://archive.stsci.edu/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>IUE</string> 
+  </void> 
+  <void property="title"> 
+   <string>International Ultraviolet Explorer</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://sdc.laeff.inta.es/omc/jsp/ssap.jsp?</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://svo/omc/ssap</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>INTA/LAEFF</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>OMC SSA</string> 
+  </void> 
+  <void property="title"> 
+   <string>OMC: The INTEGRAL Optical Monitoring Camera</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://www.laeff.inta.es/projects/svo/theory/db2vo2/html/ssap.php?model=coelho&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://svo.laeff/models/kurucz</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>INTA/LAEFF</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://svo.laeff.inta.es/</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>ODFNEW/NOVER</string> 
+  </void> 
+  <void property="title"> 
+   <string>Kurucz ODFNEW /NOVER models</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://ov.inaoep.mx/tsap/SyntMod.php?</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+      <void property="version"> 
+       <string>0.5</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://svo.iaa/models/SSP/general</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Instituto de Astrofísica de Andalucía (IAA)</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://ov.inaoep.mx/pgos3/index.php</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>PGos3 SSP</string> 
+  </void> 
+  <void property="title"> 
+   <string>PGos3: evolutionary synthesis models repository</string> 
+  </void> 
+ </object> 
+ <object class="uk.ac.starlink.splat.vo.SSAPRegResource"> 
+  <void property="capabilities"> 
+   <array class="uk.ac.starlink.splat.vo.SSAPRegCapability" length="1"> 
+    <void index="0"> 
+     <object class="uk.ac.starlink.splat.vo.SSAPRegCapability"> 
+      <void property="accessUrl"> 
+       <string>http://leda.univ-lyon1.fr/e31/i.cgi?c=tsa&amp;</string> 
+      </void> 
+      <void property="standardId"> 
+       <string>ivo://ivoa.net/std/SSA</string> 
+      </void> 
+     </object> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="identifier"> 
+   <string>ivo://obs-lyon.fr/elodie/interp</string> 
+  </void> 
+  <void property="publisher"> 
+   <string>Observatoire de Lyon</string> 
+  </void> 
+  <void property="referenceUrl"> 
+   <string>http://leda.univ-lyon1.fr/e31</string> 
+  </void> 
+  <void property="shortName"> 
+   <string>ELODIEinterp</string> 
+  </void> 
+  <void property="title"> 
+   <string>Spectrum interpolator for the ELODIE library</string> 
+  </void> 
+ </object> 
+</java> 

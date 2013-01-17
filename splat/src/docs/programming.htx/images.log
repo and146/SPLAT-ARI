@@ -1,0 +1,235 @@
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=latex 2011.7.3)  24 OCT 2012 23:21
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**./images.tex
+(./images.tex
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman-x-2009-06-19, ngerman-x-2009-06-19, afrikaans, ancientgreek, ibycus, arabi
+c, armenian, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danis
+h, dutch, ukenglish, usenglishmax, esperanto, estonian, ethiopic, farsi, finnis
+h, french, galician, german, ngerman, swissgerman, monogreek, greek, hungarian,
+ icelandic, assamese, bengali, gujarati, hindi, kannada, malayalam, marathi, or
+iya, panjabi, tamil, telugu, indonesian, interlingua, irish, italian, kurmanji,
+ lao, latin, latvian, lithuanian, mongolian, mongolianlmc, bokmal, nynorsk, pol
+ish, portuguese, romanian, russian, sanskrit, serbian, serbianc, slovak, sloven
+ian, spanish, swedish, turkish, turkmen, ukrainian, uppersorbian, welsh, loaded
+.
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (/usr/local/texlive/2011/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+(/Users/mm/Development/SPLAT-ALL/starjava/splat/src/docs/programming_htx/html.s
+ty)
+(/Users/mm/Development/SPLAT-ALL/starjava/splat/src/docs/programming_htx/star2h
+tml.sty) (/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+) (/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+) (/usr/local/texlive/2011/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: dvips.def on input line 91.
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/dvips.def
+File: dvips.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+) (/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: dvips.def on input line 130.
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 1999/02/16 v3.0i Driver-dependant file (DPC,SPQR)
+)) (/usr/local/texlive/2011/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2008/03/30 v1.1d Input encoding file
+\inpenc@prehook=\toks15
+\inpenc@posthook=\toks16
+)
+\sizebox=\box26
+\lthtmlwrite=\write3
+(./images.aux)
+\openout1 = `images.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 286.
+LaTeX Font Info:    ... okay on input line 286.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 286.
+LaTeX Font Info:    ... okay on input line 286.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 286.
+LaTeX Font Info:    ... okay on input line 286.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 286.
+LaTeX Font Info:    ... okay on input line 286.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 286.
+LaTeX Font Info:    ... okay on input line 286.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 286.
+LaTeX Font Info:    ... okay on input line 286.
+
+latex2htmlLength hsize=698.0pt
+
+latex2htmlLength vsize=902.0pt
+
+latex2htmlLength hoffset=0.0pt
+
+latex2htmlLength voffset=0.0pt
+
+latex2htmlLength topmargin=0.0pt
+
+latex2htmlLength topskip=0.00003pt
+
+latex2htmlLength headheight=0.0pt
+
+latex2htmlLength headsep=0.0pt
+
+latex2htmlLength parskip=6.0pt plus 2.0pt minus 2.0pt
+
+latex2htmlLength oddsidemargin=0.0pt
+
+latex2htmlLength evensidemargin=0.0pt
+
+l2hSize :tex2html_wrap_inline473:11.50415pt::11.50415pt::153.59103pt.
+[1
+
+
+
+]
+l2hSize :tex2html_wrap_inline562:11.50415pt::11.50415pt::131.93431pt.
+[2
+
+
+]
+l2hSize :tex2html_wrap_inline576:11.50415pt::11.50415pt::99.14513pt.
+[3
+
+
+]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 342.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 342.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 342.
+l2hSize :tex2html_wrap_inline2143:11.50415pt::11.50415pt::705.34752pt.
+
+Overfull \hbox (10.50653pt too wide) in paragraph at lines 343--344
+[]|[] 
+ []
+
+[4
+
+
+]
+l2hSize :tex2html_wrap_inline2187:11.50415pt::11.50415pt::705.34752pt.
+
+Overfull \hbox (10.50653pt too wide) in paragraph at lines 353--354
+[]|[] 
+ []
+
+[5
+
+
+]
+l2hSize :tex2html_wrap_inline2359:11.50415pt::11.50415pt::705.34752pt.
+
+Overfull \hbox (10.50653pt too wide) in paragraph at lines 363--364
+[]|[] 
+ []
+
+[6
+
+
+]
+Underfull \hbox (badness 2197) in paragraph at lines 373--373
+[]\OT1/cmr/m/it/10.95 public class Plot-Con-trol ex-tends javax.swing.JPanel im
+-ple-ments Mouse-Mo-tion-Tracker, SpecLis-tener, Fig-ureLis-tener, PlotScaledLi
+s-tener,
+ []
+
+l2hSize :tex2html_wrap_inline3477:18.30415pt::18.30415pt::705.34752pt.
+
+Overfull \hbox (10.50653pt too wide) in paragraph at lines 374--375
+[]|[] 
+ []
+
+[7
+
+
+]
+l2hSize :tex2html_wrap_inline3946:11.50415pt::11.50415pt::705.34752pt.
+
+Overfull \hbox (10.50653pt too wide) in paragraph at lines 385--386
+[]|[] 
+ []
+
+[8
+
+
+]
+l2hSize :tex2html_wrap_inline3964:11.50415pt::11.50415pt::705.34752pt.
+
+Overfull \hbox (10.50653pt too wide) in paragraph at lines 395--396
+[]|[] 
+ []
+
+[9
+
+
+]
+l2hSize :tex2html_wrap_inline5474:11.50415pt::11.50415pt::705.34752pt.
+
+Overfull \hbox (10.50653pt too wide) in paragraph at lines 406--407
+[]|[] 
+ []
+
+[10
+
+
+]
+l2hSize :tex2html_wrap_inline5560:11.50415pt::11.50415pt::705.34752pt.
+
+Overfull \hbox (10.50653pt too wide) in paragraph at lines 416--417
+[]|[] 
+ []
+
+[11
+
+
+]
+l2hSize :tex2html_wrap_inline5788:8.7125pt::8.7125pt::3.5892pt.
+[12
+
+
+] (./images.aux) ) 
+Here is how much of TeX's memory you used:
+ 880 strings out of 493634
+ 11885 string characters out of 3143401
+ 57598 words of memory out of 3000000
+ 4220 multiletter control sequences out of 15000+200000
+ 6725 words of font info for 24 fonts, out of 3000000 for 9000
+ 831 hyphenation exceptions out of 8191
+ 25i,5n,19p,185b,151s stack positions out of 5000i,500n,10000p,200000b,50000s
+
+Output written on images.dvi (12 pages, 3944 bytes).

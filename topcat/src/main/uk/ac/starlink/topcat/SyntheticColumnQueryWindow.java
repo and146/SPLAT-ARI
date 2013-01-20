@@ -211,7 +211,7 @@ public class SyntheticColumnQueryWindow extends QueryWindow {
      * @return  forced expression type, or null
      */
     public Type getType() {
-        return (Class) typeField.getSelectedItem();
+        return (Type) typeField.getSelectedItem();
     }
 
     /**

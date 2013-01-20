@@ -500,7 +500,13 @@ public class SSAMetadataPanel extends JPanel implements ActionListener, TableMod
      */
     public void addPropertyChangeListener(PropertyChangeListener l) 
     {
-        queryMetadata.addPropertyChangeListener(l);
+    	try {
+			if (l != null)
+				queryMetadata.addPropertyChangeListener(l);
+    	}
+    	catch(Exception e) {
+    		ErrorDialog.showError( this, e );
+    	}
     }
 
     /**

@@ -1,7 +1,6 @@
 package uk.ac.starlink.frog.util;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import javax.imageio.ImageIO;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
@@ -106,8 +105,7 @@ public class JPEGUtility
         // JPEG-encode the image and write to file.
         try {
             OutputStream os =  new FileOutputStream( outputFile );
-            JPEGImageEncoder encoder =  JPEGCodec.createJPEGEncoder( os );
-            encoder.encode( image );
+            ImageIO.write(image, "jpeg", os);
             os.close();
         }
         catch (Exception e) {

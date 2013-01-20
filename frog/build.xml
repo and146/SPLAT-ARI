@@ -391,6 +391,9 @@
            optimize="${optimize}">
 
       <compilerarg value="-proc:none" compiler="javac1.6"/>
+      <compilerarg value="-XDignore.symbol.file" compiler="javac1.6"/>
+      <compilerarg value="-proc:none" compiler="javac1.7"/>
+      <compilerarg value="-XDignore.symbol.file" compiler="javac1.7"/>
       <classpath refid="classpath"/>
 
     </javac>

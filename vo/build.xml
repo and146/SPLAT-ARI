@@ -113,12 +113,21 @@
   <!-- Directory containing miscellaneous docs -->
   <property name="src.docs" value="${src.dir}/docs"/>
 
+  <!-- Directory containing the TTOOLS source (to treat the circular dependency) -->
+  <property name="ttools.src.dir" value="${basedir}/../ttools/src"/>
+
+  <!-- Directory containing the java source (top of the namespace)-->
+  <property name="ttools.java.dir" value="${ttools.src.dir}/main"/>
+
   <!-- Directory containing any script required to execute or setup package-->
   <property name="script.dir" value="${src.dir}/script"/>
 
   <!-- Directory containing any third-party jars that should be
    !   distributed (normally these would belong in a proper package)-->
   <property name="src.jars.dir" value="${src.dir}/lib"/>
+
+  <!-- Directory containing any third-party jars for TTOOLS -->
+  <property name="ttools.src.jars.dir" value="${ttools.src.dir}/lib"/>
 
   <!-- Directory containing any JNI source code -->
   <property name="src.jni.dir" value="${src.dir}/jni"/>
@@ -207,6 +216,7 @@
     <pathelement location="${star.jar.dir}/util/util.jar"/>
     <pathelement location="${star.jar.dir}/table/table.jar"/>
     <pathelement location="${star.jar.dir}/votable/votable.jar"/>
+    <pathelement location="${star.jar.dir}/ttools/ttools.jar"/>
 
   </extclasspath>
 
@@ -221,6 +231,7 @@
     <pathelement location="${star.build.dir}/util/lib/util/util.jar"/>
     <pathelement location="${star.build.dir}/table/lib/table/table.jar"/>
     <pathelement location="${star.build.dir}/votable/lib/votable/votable.jar"/>
+    <pathelement location="${star.build.dir}/ttools/lib/ttools/ttools.jar"/>
 
   </extclasspath>
 
@@ -233,6 +244,9 @@
    !-->
   <path id="package.jars">
      <fileset dir="${src.jars.dir}">
+        <include name="*.jar"/>
+     </fileset>
+     <fileset dir="${ttools.src.jars.dir}">
         <include name="*.jar"/>
      </fileset>
   </path>
@@ -377,6 +391,12 @@
                classpathref="classpath"
                classname="uk.ac.starlink.votable.VOElementFactory"/>
     <fail message="No VOTABLE available" unless="votable.present"/>
+
+    <!-- TTOOLS -->
+<!--    <available property="ttools.present"
+               classpathref="classpath"
+               classname="uk.ac.starlink.ttools.func.CoordsDegrees"/>
+    <fail message="No TTOOLS available" unless="ttools.present"/>-->
  
     <!-- Need JUnit for testcases, not essential -->
     <available property="junit.present"
@@ -426,7 +446,7 @@
           unless="runonly.install"
           description="-> compiles the source code">
     <mkdir dir="${build.classes}"/>
-    <javac srcdir="${java.dir}"
+    <javac srcdir="${java.dir}:${ttools.java.dir}"
            destdir="${build.classes}"
            debug="${debug}"
            deprecation="${deprecation}"
@@ -474,7 +494,8 @@
     <mkdir dir="${dist.lib.pkg}"/>
 
     <jar destfile="${dist.lib.pkg}/${name}.jar"
-         basedir="${build.classes}">
+         basedir="${build.classes}"
+         excludes="**/uk/ac/starlink/ttools**">
       <manifest>
         <attribute name="Built-By" value="${user.name}"/>
         <attribute name="Class-Path" value="${jar.class.path}"/>
@@ -531,6 +552,7 @@
          <extension name="UTIL" href="util.jnlp"/>
          <extension name="TABLE" href="table.jnlp"/>
          <extension name="VOTABLE" href="votable.jnlp"/>
+         <extension name="TTOOLS" href="ttools.jnlp"/>
 
        </resources>
 

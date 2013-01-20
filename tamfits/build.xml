@@ -342,7 +342,8 @@
            destdir="${build.classes}"
            debug="${debug}"
            deprecation="${deprecation}"
-           optimize="${optimize}">
+           optimize="${optimize}"
+           encoding="iso-8859-1">
 
       <classpath refid="classpath"/>
 

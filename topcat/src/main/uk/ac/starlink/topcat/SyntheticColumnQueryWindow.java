@@ -210,7 +210,7 @@ public class SyntheticColumnQueryWindow extends QueryWindow {
      *
      * @return  forced expression type, or null
      */
-    public Class getType() {
+    public Type getType() {
         return (Class) typeField.getSelectedItem();
     }
 
@@ -236,7 +236,7 @@ public class SyntheticColumnQueryWindow extends QueryWindow {
         String unit = getUnit();
         String expr = getExpression();
         String ucd = getUCD();
-        Class clazz = getType();
+        Type clazz = getType();
         DefaultValueInfo info = new DefaultValueInfo( name );
         if ( desc != null ) {
             info.setDescription( desc );

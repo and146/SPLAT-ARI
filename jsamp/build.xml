@@ -189,7 +189,8 @@
     <signjar alias="${webstart.alias}"
              keystore="${webstart.keystore}"
              keypass="${webstart.keypass}"
-             storepass="${webstart.storepass}">
+             storepass="${webstart.storepass}"
+             digestalg="SHA1">
       <fileset dir="${dist.lib}" includes="**/*.jar **/*.zip"/>
     </signjar>
 

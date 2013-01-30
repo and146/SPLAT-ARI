@@ -32,6 +32,7 @@ import uk.ac.starlink.splat.ast.ASTFITSChan;
 import uk.ac.starlink.splat.ast.ASTJ;
 import uk.ac.starlink.splat.util.SplatException;
 import uk.ac.starlink.splat.util.UnitUtilities;
+import uk.ac.starlink.splat.util.Utilities;
 
 /**
  *  FITSSpecDataImpl - implementation of SpecDataImpl to access FITS
@@ -371,6 +372,73 @@ public class FITSSpecDataImpl
     }
 
     /**
+     * @return A new FITS HDU using the current configuration to
+     * populate it. Will only succeed for clone spectra.
+     */
+    
+    public BasicHDU makeHDU() throws FitsException {
+    	return makeHDU(true);
+    }
+    
+    public BasicHDU makeHDU(boolean useStandardIterator) throws FitsException {
+    	fitsref = new Fits();
+
+        //  Create the HDU that we want to add our headers and
+        //  data to it. Note we avoid overwriting the headers
+        //  created for the data array and deal with COMMENT and
+        //  HISTORY cards.
+        BasicHDU hdu = Fits.makeHDU( data );
+        Header header = hdu.getHeader();
+        Cursor hiter = getStandardIterator( header );
+
+        if ( clonedHeader != null ) {
+            HeaderCard card;
+            String key;
+
+            Cursor citer = getStandardIterator( clonedHeader );
+            while ( citer.hasNext() ) {
+                card = (HeaderCard) citer.next();
+                key = card.getKey();
+                if ( key.equals( "COMMENT" ) || key.equals( "HISTORY" ) ) {
+                    hiter.add( card );
+                }
+                else if ( ! header.containsKey( key ) ) {
+                    hiter.add( key, card );
+                }
+            }
+        }
+
+        //  Set the object keyword to the shortname.
+        String validName = shortName;
+        if ( shortName.length() > MAX_HEADER_VALUE ) {
+            validName = shortName.substring( shortName.length() -
+                                             MAX_HEADER_VALUE );
+        }
+        
+        String objectKey = "OBJECT";
+        String objectComment = "Symbolic name";
+        
+        if (useStandardIterator) {
+        	hiter.add( objectKey, new HeaderCard( objectKey, validName,
+            		objectComment ) );
+        }
+        else {
+        	Cursor iter = header.iterator();
+            iter.setKey( "CUNIT1A" );
+            if ( iter.hasNext() ) {
+                iter.next();
+            }
+            iter.add( objectKey, new HeaderCard( objectKey, validName,
+            		objectComment ) );
+        }
+        
+        //  Save the AST description of the coordinates.
+        saveAst( header );
+        
+        return hdu;
+    }
+    
+    /**
      * Create a new FITS file using the current configuration to
      * populate it. Will only succeed for clone spectra.
      */
@@ -390,44 +458,8 @@ public class FITSSpecDataImpl
         }
         try {
             // Create a null FITS object (TODO: deal with prior existence?).
-            fitsref = new Fits();
-
-            //  Create the HDU that we want to add our headers and
-            //  data to it. Note we avoid overwriting the headers
-            //  created for the data array and deal with COMMENT and
-            //  HISTORY cards.
-            BasicHDU hdu = Fits.makeHDU( data );
-            Header header = hdu.getHeader();
-            Cursor hiter = getStandardIterator( header );
-
-            if ( clonedHeader != null ) {
-                HeaderCard card;
-                String key;
-
-                Cursor citer = getStandardIterator( clonedHeader );
-                while ( citer.hasNext() ) {
-                    card = (HeaderCard) citer.next();
-                    key = card.getKey();
-                    if ( key.equals( "COMMENT" ) || key.equals( "HISTORY" ) ) {
-                        hiter.add( card );
-                    }
-                    else if ( ! header.containsKey( key ) ) {
-                        hiter.add( key, card );
-                    }
-                }
-            }
-
-            //  Set the object keyword to the shortname.
-            String validName = shortName;
-            if ( shortName.length() > MAX_HEADER_VALUE ) {
-                validName = shortName.substring( shortName.length() -
-                                                 MAX_HEADER_VALUE );
-            }
-            hiter.add( "OBJECT", new HeaderCard( "OBJECT", validName,
-                                                 "Symbolic name" ) );
-
-            //  Save the AST description of the coordinates.
-            saveAst( header );
+            
+        	BasicHDU hdu = makeHDU();
 
             //  Write the HDU (data and header) to the file.
             FileOutputStream fo = new FileOutputStream( container );

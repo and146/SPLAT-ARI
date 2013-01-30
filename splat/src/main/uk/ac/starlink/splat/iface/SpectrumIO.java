@@ -49,7 +49,18 @@ public class SpectrumIO
     //  require a lot of work catching the problems with interrupting
     //  incomplete objects.
 
-    /**
+	/**
+	 * Source types, from which the spectra may come from
+	 */
+	// TODO: implement the source identification to remaining spectra's inputs 
+	public static enum SourceType {
+		UNDEFINED,
+		SAMP,
+		SSAP,
+		LOCAL
+	};
+	
+	/**
      * Private constructor so that only one instance can exist.
      */
     private SpectrumIO()
@@ -354,6 +365,7 @@ public class SpectrumIO
         protected String dataColumn;
         protected String coordColumn;
         protected String errorColumn;
+        protected SourceType sourceType;
 
         public Props( String spectrum )
         {
@@ -375,9 +387,28 @@ public class SpectrumIO
         }
 
         public Props( String spectrum, int type, String shortName,
+                String dataUnits, String coordUnits,
+                String dataColumn, String coordColumn,
+                String errorColumn ) {
+        	
+        	this(
+        			spectrum,
+        			type,
+        			shortName,
+        			dataUnits,
+        			coordUnits,
+        			dataColumn,
+        			coordColumn,
+        			errorColumn,
+        			SourceType.UNDEFINED
+        			);
+        }
+   
+		public Props( String spectrum, int type, String shortName,
                       String dataUnits, String coordUnits,
                       String dataColumn, String coordColumn,
-                      String errorColumn )
+                      String errorColumn,
+                      SourceType sourceType)
         {
             this.spectrum = spectrum;
             this.type = type;
@@ -387,6 +418,7 @@ public class SpectrumIO
             this.dataColumn = dataColumn;
             this.coordColumn = coordColumn;
             this.errorColumn = errorColumn;
+            this.sourceType = sourceType;
         }
 
         public String getSpectrum()
@@ -468,6 +500,14 @@ public class SpectrumIO
         {
             this.errorColumn = errorColumn;
         }
+        
+        public SourceType getSourceType() {
+			return sourceType;
+		}
+
+		public void setSourceType(SourceType sourceType) {
+			this.sourceType = sourceType;
+		}
 
         //  Create a copy of this object.
         public Props copy()

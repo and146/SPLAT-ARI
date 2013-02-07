@@ -139,7 +139,7 @@ public class SSAMetadataPanel extends JPanel implements ActionListener, TableMod
         initUI();
         initMenus();
        // initFrame();
-        queryMetadata = new PropertyChangeSupport(this);
+        initializeQueryMetadata();
 
     } 
 
@@ -157,7 +157,7 @@ public class SSAMetadataPanel extends JPanel implements ActionListener, TableMod
         initUI();
         initMenus();
      
-        queryMetadata = new PropertyChangeSupport(this);
+        initializeQueryMetadata();
 
     } //
 
@@ -500,13 +500,9 @@ public class SSAMetadataPanel extends JPanel implements ActionListener, TableMod
      */
     public void addPropertyChangeListener(PropertyChangeListener l) 
     {
-    	try {
-			if (l != null)
-				queryMetadata.addPropertyChangeListener(l);
-    	}
-    	catch(Exception e) {
-    		ErrorDialog.showError( this, e );
-    	}
+    	initializeQueryMetadata();
+    	
+		queryMetadata.addPropertyChangeListener(l);
     }
 
     /**
@@ -709,7 +705,12 @@ public class SSAMetadataPanel extends JPanel implements ActionListener, TableMod
 
     } //readTable()
 
-
+    private void initializeQueryMetadata() {
+    	if (queryMetadata == null)
+			queryMetadata = new PropertyChangeSupport(this);
+    }
+    
+    
   
     /**
      * Adds a new row to the table 

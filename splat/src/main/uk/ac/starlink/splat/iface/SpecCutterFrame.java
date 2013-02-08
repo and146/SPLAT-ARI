@@ -163,6 +163,8 @@ public class SpecCutterFrame
         //  Get icons.
         ImageIcon closeImage = new ImageIcon(
             ImageHolder.class.getResource( "close.gif" ) );
+        ImageIcon saveImage = new ImageIcon(
+                ImageHolder.class.getResource( "save.gif" ) );
         ImageIcon readImage = new ImageIcon(
             ImageHolder.class.getResource( "read.gif" ) );
         ImageIcon resetImage = new ImageIcon(
@@ -179,6 +181,10 @@ public class SpecCutterFrame
         fileMenu.setMnemonic( KeyEvent.VK_F );
         menuBar.add( fileMenu );
 
+        //  Add action to do write a list of ranges to disk file.
+        Action writeAction = rangeList.getWriteAction("Save ranges", saveImage);
+        fileMenu.add( writeAction );
+        
         //  Add action to do read a list of ranges from disk file.
         Action readAction = rangeList.getReadAction("Read ranges", readImage);
         fileMenu.add( readAction );

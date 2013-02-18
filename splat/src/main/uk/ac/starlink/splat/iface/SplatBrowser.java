@@ -596,11 +596,17 @@ public class SplatBrowser
         specList.setSelectionMode(
             ListSelectionModel.MULTIPLE_INTERVAL_SELECTION );
 
-        //  Double click on item(s) to display new plots.
+        /* 
+         * Double click on item(s) to display new plots.
+         * Single click on item(s) to highlight them in plot windows
+         */
         specList.addMouseListener( new MouseAdapter() {
                 public void mouseClicked( MouseEvent e ) {
                     if ( e.getClickCount() >= 2 ) {
                         displaySelectedSpectra();
+                    }
+                    if ( e.getClickCount() == 1 ) {
+                    	fireCurrentSpectrumChanged();
                     }
                 }
             });
@@ -2457,6 +2463,20 @@ public class SplatBrowser
         return id;
     }
 
+    /**
+     * Sets the current spectrum in global spectra list
+     * (if just one spectrum is selected) and fires 
+     * 'current spectrum changed' event
+     */
+    protected void fireCurrentSpectrumChanged() {
+    	int[] indexes = getSelectedSpectra();
+    	if (indexes != null) {
+	    	if (indexes.length == 1) {
+	    		globalList.setCurrentSpectrum(indexes[0]);
+	    	}
+    	}
+    }
+    
     /**
      * Make a report using an ErrorDialog for when loading a list
      * of spectra has failed for some reason.

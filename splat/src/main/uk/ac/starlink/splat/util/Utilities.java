@@ -7,6 +7,7 @@
  */
 package uk.ac.starlink.splat.util;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Rectangle;
@@ -443,5 +444,32 @@ public class Utilities
             onetwo[j++] = two[i];
         }
         return onetwo;
+    }
+    
+    /**
+     * Inverts color parsed as integer
+     * 
+     * @param color 
+     * @return inverted color as integer
+     * @see java.awt.Color
+     */
+    public static int invertColor(int color) {
+    	Color origColor = new Color(color);
+    	
+    	/*
+    	 * color's integer has format:
+    	 * red: bits  16-23
+    	 * green: bits 8-15
+    	 * blue: bits 0-7
+    	 * 
+    	 * so we need to invert the individual components (R,G,B)
+    	 * and put them to their decade
+    	 */
+    	
+    	int invertedRed = ((255 - origColor.getRed()) * 65536);
+		int invertedGreen = ((255 - origColor.getGreen()) * 256);
+		int invertedBlue = ((255 - origColor.getBlue()));
+		
+		return invertedRed + invertedGreen + invertedBlue;
     }
 }

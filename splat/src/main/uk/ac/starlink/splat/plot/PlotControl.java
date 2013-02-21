@@ -29,10 +29,14 @@ import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.print.attribute.PrintRequestAttributeSet;
+
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -2213,3 +2217,4 @@ public class PlotControl
     	}
     }
 }
+

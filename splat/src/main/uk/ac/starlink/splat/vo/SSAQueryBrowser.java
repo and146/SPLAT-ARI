@@ -43,12 +43,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -93,6 +95,10 @@ import jsky.util.SwingWorker;
 
 import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
+import org.xml.sax.XMLReader;
 
 import uk.ac.starlink.splat.data.SpecDataFactory;
 import uk.ac.starlink.splat.iface.HelpFrame;
@@ -112,6 +118,7 @@ import uk.ac.starlink.table.DescribedValue;
 import uk.ac.starlink.table.RowSequence;
 import uk.ac.starlink.table.StarTable;
 import uk.ac.starlink.table.TableFormatException;
+import uk.ac.starlink.table.ValueInfo;
 import uk.ac.starlink.table.gui.StarJTable;
 import uk.ac.starlink.util.ProxySetup;
 import uk.ac.starlink.util.gui.BasicFileChooser;
@@ -130,7 +137,13 @@ import uk.ac.starlink.votable.VOElementFactory;
 import uk.ac.starlink.votable.VOSerializer;
 import uk.ac.starlink.votable.VOStarTable;
 import uk.ac.starlink.votable.VOTableWriter;
+import uk.ac.starlink.votable.ValuesElement;
+
 import javax.swing.BoxLayout;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 
 
 /**
@@ -157,7 +170,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
 
     /** Initial window size and location */
     private static final Rectangle defaultWindowLocation =
-            new Rectangle( 0, 0, 800, 700 );
+            new Rectangle( 0, 0, 800, 720 );
 
     /** The object holding the list of servers that we should use for SSA
      *  queries. */
@@ -222,6 +235,10 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
     /** Display extended search parameters */
     protected JRadioButton  customSearchButton;
 
+    /** Display GET DATA  parameters and activation status */
+    protected JButton  getDataButton;
+    
+    protected boolean getDataEnabled = false;
 
     /** Make the query to all known servers */
     protected JButton goButton = null;
@@ -308,6 +325,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
         ProxySetup.getInstance().restore();
     }
 
+    
     /* The Query text that will be displayed */
     private SSAQuery queryLine;
     
@@ -316,6 +334,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
     
     /** The list of all input parameters read from the servers as a hash map */
     private static HashMap< JTextField, String > queryMetaParam=null; 
+    
     
     /** the authenticator for access control **/
     private static SSAPAuthenticator authenticator;
@@ -327,9 +346,11 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
     private SSAServerTree tree;
     
     private boolean isLookup = false;
-    
+    private boolean getDataSelection = false;
+   
     static ProgressPanelFrame progressFrame = null;
 
+    private GetDataQueryFrame getDataFrame = null;
 
     /**
      * Create an instance.
@@ -367,7 +388,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
     {
        
         JPanel contentPane = (JPanel) getContentPane();
-        contentPane.setPreferredSize(new Dimension(900,700));
+        contentPane.setPreferredSize(new Dimension(900,720));
         //contentPane.setLayout( new BorderLayout() );
        // contentPane.setLayout( new GridLayout(1,2,3,3) );
         contentPane.setLayout( new BoxLayout(contentPane, BoxLayout.X_AXIS) );
@@ -397,7 +418,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
      //   gblayout.setConstraints(centrePanel, c);
    //     contentPane.add( centrePanel);//, BorderLayout.LINE_END );
         
-       // this.setPreferredSize(�);
+       // this.setPreferredSize(ç);
       //  contentPane.setSize(800, 600);
        // this.setSize(new Dimension(800,600));
       
@@ -600,6 +621,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
         queryParamPanel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill=GridBagConstraints.HORIZONTAL;
+        
         c.gridx = 0;
         c.gridy = 0;
         
@@ -886,7 +908,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
      
      
         resultsPane = new JTabbedPane();
-        resultsPane.setPreferredSize(new Dimension(600,300));
+        resultsPane.setPreferredSize(new Dimension(600,310));
         resultsPanel.add( resultsPane, BorderLayout.NORTH );
         
         JPanel controlPanel = new JPanel( new BorderLayout() );
@@ -894,55 +916,67 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
         JPanel controlPanel2 = new JPanel();
 
         //  Download and display.
-        displaySelectedButton = new JButton( "Display selected" );
+        displaySelectedButton = new JButton( "<html>Display<BR> selected</html>" );
         displaySelectedButton.addActionListener( this );
-        displaySelectedButton.setMargin(new Insets(2,2,2,2));  
+        displaySelectedButton.setMargin(new Insets(1, 10, 1, 10));  
         displaySelectedButton.setToolTipText
         ( "Download and display all spectra selected in all tables" );
         controlPanel1.add( displaySelectedButton );
 
 
-        displayAllButton = new JButton( "Display all" );
+        displayAllButton = new JButton( "<html>Display<BR>all</html>" );
         displayAllButton.addActionListener( this );
-        displayAllButton.setMargin(new Insets(2,2,2,2));  
+        displayAllButton.setMargin(new Insets(1,10,1,10));  
         displayAllButton.setToolTipText
         ( "Download and display all spectra in all tables" );
         controlPanel1.add( displayAllButton );
 
         //  Just download.
-        downloadSelectedButton = new JButton( "Download selected" );
+        downloadSelectedButton = new JButton( "<html>Download<BR>selected</html>" );
         downloadSelectedButton.addActionListener( this );
-        downloadSelectedButton.setMargin(new Insets(2,2,2,2));  
+        downloadSelectedButton.setMargin(new Insets(1,10,1,10));  
         downloadSelectedButton.setToolTipText
         ( "Download all spectra selected in all tables");
         controlPanel1.add( downloadSelectedButton );
+      
 
-        downloadAllButton = new JButton( "Download all" );
+        downloadAllButton = new JButton( "<html>Download<BR> all</html>" );
         downloadAllButton.addActionListener( this );
-        downloadAllButton.setMargin(new Insets(2,2,2,2));  
+        downloadAllButton.setMargin(new Insets(1,10,1,10));  
         downloadAllButton.setToolTipText
         ( "Download all spectra in all tables");
         controlPanel1.add( downloadAllButton );
 
 
         //  Deselect
-        deselectVisibleButton = new JButton( "Deselect" );
+        deselectVisibleButton = new JButton( "<html>Deselect<br>table</html>" );
         deselectVisibleButton.addActionListener( this );
-        deselectVisibleButton.setMargin(new Insets(2,2,2,2));  
+        deselectVisibleButton.setMargin(new Insets(1,10,1,10));  
         deselectVisibleButton.setToolTipText
         ( "Deselect all spectra in displayed table" );
       //  controlPanel2.add( deselectVisibleButton );
         controlPanel1.add( deselectVisibleButton );
 
 
-        deselectAllButton = new JButton( "Deselect all" );
+        deselectAllButton = new JButton( "<html>Deselect <BR>all</html>" );
         deselectAllButton.addActionListener( this );
-        deselectAllButton.setMargin(new Insets(2,2,2,2));  
+        deselectAllButton.setMargin(new Insets(1,10,1,10));  
         deselectAllButton.setToolTipText
         ( "Deselect all spectra in all tables" );
      //   controlPanel2.add( deselectAllButton );
         controlPanel1.add( deselectAllButton );
 
+        getDataButton = new JButton( "<html>GET<BR> DATA</html>" );
+        getDataButton.addActionListener( this );
+        getDataButton.setMargin(new Insets(1,10,1,10));  
+        getDataButton.setToolTipText
+        ( "Server-side processing parameters" );
+        getDataButton.setEnabled(false);
+        getDataButton.setVisible(false);
+     //   controlPanel2.add( deselectAllButton );
+        
+      
+        controlPanel1.add( getDataButton );
         controlPanel.add( controlPanel1, BorderLayout.NORTH );
      //   controlPanel.add( controlPanel2, BorderLayout.SOUTH );
         resultsPanel.add( controlPanel, BorderLayout.SOUTH );
@@ -1195,6 +1229,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
             
             SSAQuery ssaQuery =  new SSAQuery(queryLine);//new SSAQuery( server );
             ssaQuery.setServer( server) ; //Parameters(queryLine); // copy the query parameters to the new query
+           
  /*           ssaQuery.setTargetName( objectName );
             ssaQuery.setPosition( ra, dec );
             ssaQuery.setRadius( radius );
@@ -1225,6 +1260,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
      */
     protected void processQueryList( ArrayList<SSAQuery> queryList )
     {
+        
         //  final ArrayList localQueryList = queryList;
         makeResultsDisplay( null );
         
@@ -1239,6 +1275,8 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
         Iterator<SSAQuery> i = queryList.iterator();
         while ( i.hasNext() ) {
             final SSAQuery ssaQuery = i.next();
+         
+
             final ProgressPanel progressPanel = new ProgressPanel( "Querying: " + ssaQuery.getDescription());
             progressFrame.addProgressPanel( progressPanel );
 
@@ -1284,7 +1322,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
     /**
      * Do a query to an SSAP server.
      */
-    private void runProcessQuery( SSAQuery ssaQuery,
+    private void runProcessQuery( SSAQuery ssaQuery, 
             ProgressPanel progressPanel )
                     throws InterruptedException
                     {
@@ -1294,10 +1332,13 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
         //  We just download VOTables, so avoid attempting to build the other
         //  formats.
         StarTable starTable = null;
+        GetDataTable getDataTable = null;
+      
         URL queryURL = null;
 
         // int j = 0;
-
+        
+       
         try {
             queryURL = ssaQuery.getQueryURL();
           
@@ -1336,17 +1377,33 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
 
         progressPanel.logMessage( ssaQuery.getBaseURL() );
     
-    
+       
         //  Do the query and get the result as a StarTable. Uses this
         //  method for efficiency as non-result tables are ignored.
         try {
-            InputSource inSrc = new InputSource( queryURL.openStream() );
             
+            
+            URLConnection con =  queryURL.openConnection();
+           
+            con.setConnectTimeout(10 * 1000); // 10 seconds
+            con.connect();
+            
+            InputSource inSrc = new InputSource( con.getInputStream() );
+                 
             // inSrc.setSystemId( ssaQuery.getBaseURL() );
             inSrc.setSystemId( queryURL.toString());
+            
             VOElementFactory vofact = new VOElementFactory();
-           
-            starTable = DalResultXMLFilter.getDalResultTable( vofact, inSrc );
+            
+            VOElement voe = DalResourceXMLFilter.parseDalResult(vofact, inSrc);
+           // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\
+            starTable = DalResourceXMLFilter.getDalResultTable( voe );
+            getDataTable = DalResourceXMLFilter.getDalGetDataTable( voe );
+            if (getDataTable != null) {
+                ssaQuery.setGetDataTable( getDataTable);
+
+            }
+
           
             //  Check parameter QUERY_STATUS, this should be set to OK
             //  when the query
@@ -1384,7 +1441,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                 }
                 failed = true;
             }
-
+           
             //  Dump query results as VOTables.
             //uk.ac.starlink.table.StarTableOutput sto =
             //    new uk.ac.starlink.table.StarTableOutput();
@@ -1417,6 +1474,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
         }
 } //runProcessQUery
 
+ 
     /**
      * Display the results of the queries to the SSA servers. The results can
      * be either a list of SSAQuery instances, or the StarTables themselves
@@ -1424,6 +1482,8 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
      */
     protected void makeResultsDisplay( ArrayList<VOStarTable> tableList )
     {
+      
+        
         if ( starJTables == null ) {
             starJTables = new ArrayList<StarJTable>();
         }
@@ -1436,26 +1496,42 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
             Iterator<VOStarTable> i = tableList.iterator();
             while ( i.hasNext() ) {
                 addResultsDisplay( i.next() );
+               
             }
         }
     }
-
-    protected void addResultsDisplay( Object next )
+    protected synchronized void addResultsDisplay( Object next )
     {
         DescribedValue dValue = null;
         JScrollPane scrollPane = null;
         SSAQuery ssaQuery = null;
         StarJTable table = null;
         StarTable starTable = null;
+        GetDataTable getDataTable = null;
         String shortName = null;
-
+     
+        boolean hasParams = false;
+       
+   
         if ( next instanceof SSAQuery && next != null ) {
             ssaQuery = (SSAQuery) next;
             starTable = ssaQuery.getStarTable();
+            getDataTable = ssaQuery.getGetDataTable();
             shortName = ssaQuery.getDescription();
+            if ( starTable != null ) {
+            String baseurl = ssaQuery.getBaseURL();
+                try {
+                    starTable.setURL(new URL(baseurl));
+                } catch (MalformedURLException e) {
+                    logger.info( "Malformed base URL for " + baseurl );
+                } 
+            }
+           
+            
         }
         else if ( next instanceof StarTable) {
             starTable = (StarTable) next;
+                
             dValue = starTable.getParameterByName( "ShortName" );
             if ( dValue == null ) {
                 shortName = starTable.getName();
@@ -1463,6 +1539,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
             else {
                 shortName = (String)dValue.getValue();
             }
+           
         }
         else {
             logger.info( "Couldn't handle: " + next );
@@ -1474,6 +1551,15 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                 table = new StarJTable( starTable, true );
                 scrollPane = new JScrollPane( table );
               //  scrollPane.setPreferredSize(new Dimension(600,400));
+                if (getDataTable != null) {
+                    shortName = "✂ " + shortName;
+                    if ( getDataFrame == null )
+                        getDataFrame = new GetDataQueryFrame();
+                    getDataFrame.addService(shortName, getDataTable);
+                    getDataButton.setEnabled(true);
+                    getDataButton.setVisible(true);
+                    getDataButton.setForeground(Color.GRAY);
+                }
                 resultsPane.addTab( shortName, scrollPane );
                 starJTables.add( table );
 
@@ -1489,11 +1575,15 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
         }
     }
 
+  
+       
     /**
      * Deselect all spectra in the visible table, or deselect all tables.
      */
     protected void deselectSpectra( boolean all )
     {
+        if (starJTables == null)  // avoids NPE if no results are present
+            return;
         if ( all ) {
             //  Visit all the tabbed StarJTables.
             Iterator<StarJTable> i = starJTables.iterator();
@@ -1516,7 +1606,6 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
     /**
      * Get the main SPLAT browser to download and display spectra.
      * <p>
-     * Can either display all the spectra, just the selected spectra, or the
      * spectrum from a row in a given table. If table is null, then the
      * selected parameter determines the behaviour of all or just the selected
      * spectra.
@@ -1527,8 +1616,13 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
         //  List of all spectra to be loaded and their data formats and short
         //  names etc.
         ArrayList<Props> specList = new ArrayList<Props>();
-
+     
+       
+        
         if ( table == null ) {
+            
+            if (starJTables == null)  // avoids NPE if no results are present
+                return;
             //  Visit all the tabbed StarJTables.
             Iterator<StarJTable> i = starJTables.iterator();
             while ( i.hasNext() ) {
@@ -1589,6 +1683,11 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
             int row )
     {
         int[] selection = null;
+        
+       
+        HashMap< String, String > getDataParam = null;
+        if ( getDataFrame.isVisible() ) 
+            getDataParam = getDataFrame.getParams();
 
         //  Check for a selection if required, otherwise we're using the given
         //  row.
@@ -1619,13 +1718,16 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
             int specunitscol = -1;
             int fluxunitscol = -1;
             int fluxerrorcol = -1;
+            int pubdidcol=-1;
             ColumnInfo colInfo;
             String ucd;
             String utype;
+            String getDataRequest="";
+            
             for( int k = 0; k < ncol; k++ ) {
                 colInfo = starTable.getColumnInfo( k );
                 ucd = colInfo.getUCD();
-
+              
                 //  Old-style UCDs for backwards compatibility.
                 if ( ucd != null ) {
                     ucd = ucd.toLowerCase();
@@ -1677,8 +1779,30 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                     else if ( utype.endsWith( "char.fluxaxis.unit" ) ) {
                         fluxunitscol = k;
                     }
+                    else if ( utype.endsWith( "Curation.PublisherDID" ) ) {
+                        pubdidcol = k;
+                    }
                 }
-            }
+                if (colInfo.getName().equals("ssa_pubDID"))
+                    pubdidcol = k;
+                
+            } // for
+            
+            // if we have a pubDID col, check if the getData parameters are set.
+            if (pubdidcol != -1  && getDataParam != null )
+                if ( ! getDataParam.isEmpty() ) {                   
+                    for (String key : getDataParam.keySet()) {
+                        String value = getDataParam.get(key);
+                                if (value == null || value.length() > 0)
+                                    try {
+                                        getDataRequest+="&"+key+"="+URLEncoder.encode(value, "UTF-8");
+                                    } catch (UnsupportedEncodingException e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    }                                           
+                    }
+                }
+            
 
             //  If we have a DATA_LINK column, gather the URLs it contains
             //  that are appropriate.
@@ -1704,7 +1828,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                                     ( specDataFactory
                                             .mimeToSPLATType( value ) );
                                 }
-                            }
+                            } //while
                             if ( namecol != -1 ) {
                                 value = ( (String)rseq.getCell( namecol ).toString() );
                                 if ( value != null ) {
@@ -1726,7 +1850,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                                         props.setErrorColumn( axes[2] );
                                     }
                                 }
-                            }
+                            } // if axescol !- 1
                             else {
 
                                 //  Version 1.0 style.
@@ -1742,7 +1866,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                                     value = (String)rseq.getCell(fluxerrorcol).toString();
                                     props.setErrorColumn( value );
                                 }
-                            }
+                            } //else 
 
                             if ( unitscol != -1 ) {
 
@@ -1768,9 +1892,16 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                                     props.setDataUnits( value );
                                 }
                             }
+                            if (pubdidcol != -1  && getDataParam != null) {
+                                if (! getDataParam.isEmpty()) { 
+                                   props.setPubdidValue(rseq.getCell(pubdidcol).toString());
+                                   props.setGetDataRequest(getDataRequest);
+                                   props.setServerURL(starTable.getURL().toString());
+                                }
+                            }
                             specList.add( props );
-                        }
-                    }
+                        } //while
+                    } // if selected
                     else {
                         //  Just using selected rows. To do this we step
                         //  through the table and check if that row is the
@@ -1835,6 +1966,13 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                                         props.setDataUnits( units[1] );
                                     }
                                 }
+                                if (pubdidcol != -1  && getDataParam != null) {
+                                    if (! getDataParam.isEmpty()) { 
+                                       props.setPubdidValue(rseq.getCell(pubdidcol).toString());
+                                       props.setGetDataRequest(getDataRequest);
+                                       props.setServerURL(starTable.getURL().toString());
+                                    }
+                                }
                                 specList.add( props );
 
                                 //  Move to next selection.
@@ -1845,8 +1983,8 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                             }
                             k++;
                         }
-                    }
-                }
+                    } // if selected
+                } // try
                 catch (IOException ie) {
                     ie.printStackTrace();
                 }
@@ -1863,8 +2001,8 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                         // Ignore.
                     }
                 }
-            }
-        }
+            }// if linkcol != -1
+        } 
     }
 
     /**
@@ -2296,10 +2434,6 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                 
                 return;     
             }
-
-        if ( (source.getClass() == JTextField.class) && queryMetaParam.get(source) != null) {
-        //    queryLine.setParam()
-        }
                                  
         if ( source.equals( addParamButton ) ) 
         {
@@ -2370,7 +2504,57 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
             deselectSpectra( true );
             return;
         }
+        if ( source.equals( getDataButton ) ) {
+            if (getDataFrame == null || getDataFrame.getParams() == null)
+                return;
+            if (getDataFrame.isVisible()) { // deactivate
+                getDataFrame.setVisible(false);
+                //getDataButton.set.setEnabled(false);
+                deactivateGetDataSupport();
+                
+                // activateAll !!!!!!!
+            } else {
+                getDataFrame.setVisible(true);
+               // getDataButton.setEnabled(true);
+                activateGetDataSupport();
+                //deactivatenotSupportedServices!!!!!!!!!
+            }
+            return;
+        }
+     
 
+    }
+    /**
+     * ActivateGetDataSupport
+     * deactivate all sites that do not support getData
+     * activate getData queries on supported sites
+     */
+    private void activateGetDataSupport() {
+        
+        getDataEnabled=true;
+        getDataButton.setForeground(Color.BLACK);
+        int nrTabs = resultsPane.getTabCount();
+        for(int i = 0; i < nrTabs; i++)
+        {
+           if ( ! resultsPane.getTitleAt(i).startsWith("✂") ) 
+               resultsPane.setEnabledAt(i, false);
+           else 
+               resultsPane.setSelectedIndex(i);
+        }
+    }
+    /**
+     * DeactivateGetDataSupport
+     * activate all sites, without getData support
+     */
+    private void deactivateGetDataSupport() {
+        
+        getDataEnabled=false;
+        getDataButton.setForeground(Color.GRAY);
+        int nrTabs = resultsPane.getTabCount();
+        for(int i = 0; i < nrTabs; i++)
+        {
+            resultsPane.setEnabledAt(i, true);      
+        }
     }
 
     /**

@@ -101,6 +101,7 @@
   <property name="deprecation" value="false"/>
   <property name="optimize" value="true"/>
   <property name="source.version" value="1.5"/>
+  <property name="target.version" value="1.6"/>
 
   <!-- Extra task options, if any -->
   <property name="chmod.fail" value="false"/>
@@ -434,7 +435,8 @@
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}"
-           source="${source.version}">
+           source="${source.version}"
+           target="${target.version}">
 
       <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="classpath"/>
@@ -1385,7 +1387,9 @@ JNI libraries not built (NDF library not installed in ${stardev})"
     <javac srcdir="${tests.dir}"
            destdir="${build.tests}"
            debug="${debug}"
-           deprecation="${deprecation}" >
+           deprecation="${deprecation}" 
+           source="${source.version}"
+           target="${target.version}">
       <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="tests-classpath"/>
     </javac>

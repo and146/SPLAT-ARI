@@ -91,6 +91,7 @@
   <property name="deprecation" value="false"/>
   <property name="optimize" value="true"/>
   <property name="source.version" value="1.4"/>
+  <property name="target.version" value="1.6"/>
 
   <!-- Extra task options, if any -->
   <property name="chmod.fail" value="false"/>
@@ -361,7 +362,8 @@
            debug="${debug}"
            deprecation="${deprecation}"
            source="${source.version}"
-           optimize="${optimize}">
+           optimize="${optimize}"
+           target="${target.version}">
 
       <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="classpath"/>
@@ -409,7 +411,8 @@
     <mkdir dir="${build.dir}/prep"/>
     <javac srcdir="${src.dir}/prep"
            destdir="${build.dir}/prep"
-           source="${source.version}">
+           source="${source.version}"
+           target="${target.version}">
     </javac>
     <java classname="WriteConvertWorker" 
           classpath="${build.dir}/prep"
@@ -881,7 +884,8 @@
            destdir="${build.tests}"
            debug="${debug}"
            source="${source.version}"
-           deprecation="${deprecation}" >
+           deprecation="${deprecation}" 
+           target="${target.version}">
       <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="tests-classpath"/>
     </javac>

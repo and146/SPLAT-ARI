@@ -89,6 +89,7 @@
   <property name="deprecation" value="false"/>
   <property name="optimize" value="true"/>
   <property name="source.version" value="1.4"/>
+  <property name="target.version" value="1.6"/>
 
   <!-- Extra task options, if any -->
   <property name="chmod.fail" value="false"/>
@@ -416,7 +417,8 @@
            debug="${debug}"
            deprecation="${deprecation}"
            source="${source.version}"
-           optimize="${optimize}">
+           optimize="${optimize}"
+           target="${target.version}">
 
       <classpath refid="classpath"/>
       <compilerarg value="-proc:none" compiler="javac1.6"/>

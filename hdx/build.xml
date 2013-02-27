@@ -373,7 +373,8 @@
         destdir="${build.classes}"
         debug="${debug}"
         srcdir="${build.java}"
-        optimize="${optimize}">
+        optimize="${optimize}"
+        target="1.6">
 
       <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="classpath"/>
@@ -961,7 +962,8 @@
       source="1.4"
       destdir="${build.tests}"
       debug="${debug}"
-      srcdir="${tests.dir}">
+      srcdir="${tests.dir}"
+      target="1.6">
 
       <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="tests-classpath"/>

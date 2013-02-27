@@ -88,6 +88,8 @@
   <property name="debug" value="true"/>
   <property name="deprecation" value="false"/>
   <property name="optimize" value="true"/>
+  <property name="source.version" value="1.6"/>
+  <property name="target.version" value="1.6"/>
 
   <!-- Extra task options, if any -->
   <property name="chmod.fail" value="false"/>
@@ -343,8 +345,10 @@
            debug="${debug}"
            deprecation="${deprecation}"
            optimize="${optimize}"
-           encoding="iso-8859-1">
-
+           encoding="iso-8859-1"
+           source="${source.version}"
+           target="${target.version}">
+      <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="classpath"/>
 
       <!-- Exclude any Java files in the source tree that should not be
@@ -885,7 +889,10 @@
     <javac srcdir="${tests.dir}"
            destdir="${build.tests}"
            debug="${debug}"
-           deprecation="${deprecation}" >
+           deprecation="${deprecation}" 
+           source="${source.version}"
+           target="${target.version}">
+      <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="tests-classpath"/>
     </javac>
 

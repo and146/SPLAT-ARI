@@ -3,7 +3,7 @@
 # script variables
 SPLAT_BUILD_LOG=splat_build_log.txt # the log file for cleaning & building SPLAT (only)
 SCRIPT_BASE_DIR=`pwd`
-STARLINK_INST_DIR_BASE=../bin # installation directory
+STARJAVA_INST_DIR_BASE=../bin # installation directory
 
 CMD_ENABLE_LOG='--log'
 CMD_DISABLE_ANT_BUILD='--no-ant-build'
@@ -11,8 +11,11 @@ CMD_DISABLE_ANT_BUILD='--no-ant-build'
 CMD_SUBPROJ='--subproject'
 CMD_TASK='--task'
 
+CMD_USER_JAVA='--java-path'
+
 ENABLE_LOG=false
 ENABLE_ANT_BUILD=true
+ENABLE_JAVA_AUTODETECTION=true
 
 SUBPROJ=''
 TASK='build'
@@ -20,13 +23,13 @@ TASK='build'
 ERROR_IN_CMD=false
 SHOW_HELP=true
 
-# starlink variables
-export STAR_JAVA=/usr/bin/java # will be reset during runtime
+# starjava variables
+export STAR_JAVA="" # will be reset during runtime
 
 # header
 echo
 echo --------------------------
-echo ---- Starlink Builder ----
+echo ---- Starjava Builder ----
 echo --------------------------
 echo
 
@@ -63,6 +66,14 @@ do
 			TASK=${cmdparamstmp[$CMD_PARAMS_COUNTER+1]}
 			SHOW_HELP=false
 			;;
+                
+                # override the autodetected version of java?
+		$CMD_USER_JAVA )
+			# TODO treat an unusual usage...			
+			STAR_JAVA=${cmdparamstmp[$CMD_PARAMS_COUNTER+1]}
+			ENABLE_JAVA_AUTODETECTION=false
+			SHOW_HELP=false
+			;;
 			
 	esac
 	CMD_PARAMS_COUNTER=$(($CMD_PARAMS_COUNTER+1))
@@ -82,10 +93,16 @@ then
 	echo Parameters:
 	echo
 	echo "     --help                        Shows this help"
+	echo
 	echo "     $CMD_ENABLE_LOG                         Logs the build output to the file: $SPLAT_BUILD_LOG"
+	echo	
 	echo "     $CMD_DISABLE_ANT_BUILD                Disables building of Ant"
+	echo	
 	echo "     $CMD_SUBPROJ <project_name>   Apply task only at <project_name> subproject"
+	echo	
 	echo "     $CMD_TASK <task_name>            Run Ant with this task"
+	echo	
+	echo "     $CMD_USER_JAVA <java_bin_path>   When set, the script will use this version of Java instead of autodetected"
 	echo
 	exit 0
 fi
@@ -96,7 +113,7 @@ echo
 echo "Log: $ENABLE_LOG"
 echo "Build Ant: $ENABLE_ANT_BUILD"
 echo
-echo $STARLINK_INST_DIR_BASE 
+echo $STARJAVA_INST_DIR_BASE 
 
 echo
 echo   Prerequisities
@@ -110,11 +127,16 @@ echo
 echo -- Setting up STAR_JAVA variable:
 java_binarires=$(echo `whereis -b java` | tr "java:" "\n")
 
-for b in $java_binarires
-do
-	STAR_JAVA="$b"java
-	break
-done
+# java autodetection
+if [ $ENABLE_JAVA_AUTODETECTION == true ]
+then	
+	for b in $java_binarires
+	do
+		STAR_JAVA="$b"java
+		break
+	done
+fi
+
 echo $STAR_JAVA
 echo
 
@@ -159,9 +181,9 @@ export PATH=$ANT_BUILD/bin:$PATH
 echo $PATH
 echo
 
-# Starlink build part
+# Starjava build part
 echo
-echo   Starlink build part
+echo   Starjava build part
 echo -------------------
 
 echo
@@ -204,21 +226,21 @@ then
 else
 	ant -Dfile.encoding=iso-8859-1 build
 fi
-# Starlink Installation part
+# STARJAVA Installation part
 # FIX this is awful and buggy...
 echo Installing ...
-STARLINK_INST_DIR=../$STARLINK_INST_DIR_BASE
+STARJAVA_INST_DIR=../$STARJAVA_INST_DIR_BASE
 if [ "$SUBPROJ" != "" ]
 then
-	STARLINK_INST_DIR=../$STARLINK_INST_DIR_BASE
+	STARJAVA_INST_DIR=../$STARJAVA_INST_DIR_BASE
 fi
-echo Instalation directory: $STARLINK_INST_DIR
+echo Instalation directory: $STARJAVA_INST_DIR
 echo
 echo Treating error when installing ttools...:
-TTOOLS_ERR1_DEST=`pwd`/ttools/src/$STARLINK_INST_DIR_BASE/etc/xdoc
+TTOOLS_ERR1_DEST=`pwd`/ttools/src/$STARJAVA_INST_DIR_BASE/etc/xdoc
 echo      Creating $TTOOLS_ERR1_DEST
-mkdir `pwd`/ttools/src/$STARLINK_INST_DIR_BASE
-mkdir `pwd`/ttools/src/$STARLINK_INST_DIR_BASE/etc
+mkdir `pwd`/ttools/src/$STARJAVA_INST_DIR_BASE
+mkdir `pwd`/ttools/src/$STARJAVA_INST_DIR_BASE/etc
 mkdir $TTOOLS_ERR1_DEST
 TTOOLS_ERR1_SRC=`pwd`/xdoc/src/etc
 echo copying from $TTOOLS_ERR1_SRC to $TTOOLS_ERR1_DEST
@@ -226,22 +248,22 @@ cp -v $TTOOLS_ERR1_SRC/* $TTOOLS_ERR1_DEST/
 sleep 10
 
 echo Treating error when installing TOPCAT...:
-TOPCAT_ERR1_DEST=`pwd`/topcat/src/$STARLINK_INST_DIR_BASE/etc/xdoc
+TOPCAT_ERR1_DEST=`pwd`/topcat/src/$STARJAVA_INST_DIR_BASE/etc/xdoc
 echo      Creating $TOPCAT_ERR1_DEST
-mkdir `pwd`/topcat/src/$STARLINK_INST_DIR_BASE
-mkdir `pwd`/topcat/src/$STARLINK_INST_DIR_BASE/etc
+mkdir `pwd`/topcat/src/$STARJAVA_INST_DIR_BASE
+mkdir `pwd`/topcat/src/$STARJAVA_INST_DIR_BASE/etc
 mkdir $TOPCAT_ERR1_DEST
 TOPCAT_ERR1_SRC=`pwd`/xdoc/src/etc
 echo copying from $TOPCAT_ERR1_SRC to $TOPCAT_ERR1_DEST
 cp -v $TOPCAT_ERR1_SRC/* $TOPCAT_ERR1_DEST/
 sleep 10
 
-ant -Dstar.dir=$STARLINK_INST_DIR install
+ant -Dstar.dir=$STARJAVA_INST_DIR install
 
 echo
 echo
 echo ----------------------
 echo
-echo Installation directory: `pwd`/$STARLINK_INST_DIR_BASE
+echo Installation directory: `pwd`/$STARJAVA_INST_DIR_BASE
 echo
 echo

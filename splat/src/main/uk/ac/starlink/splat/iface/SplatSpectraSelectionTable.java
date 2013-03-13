@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -195,7 +197,14 @@ public class SplatSpectraSelectionTable
      * 
      * @return list of selected spectra
      */
-    public List<SpecData> getSelectedSpectra() {
-    	return list.getSelectedValuesList();
+
+	public List<SpecData> getSelectedSpectra() {
+    	// TODO getSelectedValues() is deprecated since Java 1.7
+		// (replaced by getSelectedValuesList())
+		List<SpecData> spectra = new LinkedList<SpecData>();
+    	for (Object o : list.getSelectedValues()) {
+    		spectra.add((SpecData) o);
+    	}
+    	return spectra;
     }
 }

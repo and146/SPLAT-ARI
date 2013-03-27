@@ -370,6 +370,7 @@ public class SpectrumIO
         protected SourceType sourceType;
         protected String pubdidValue;
         protected String getDataRequest;
+        protected String getDataFormat;
         protected String serverURL;
 
         public Props( String spectrum )
@@ -427,6 +428,7 @@ public class SpectrumIO
             this.errorColumn = errorColumn;
             this.sourceType = sourceType;
             this.getDataRequest=null;
+            this.getDataFormat=null; 
             this.pubdidValue=pubdidValue;
             this.serverURL=null;
         }
@@ -471,7 +473,21 @@ public class SpectrumIO
         {
             this.type = type;
         }
-
+        public void setGetDataFormat( String format )
+        {
+            if (format.contains("fits")) 
+                this.getDataFormat = "FITS";
+            else if (format.contains("votable")) 
+                this.getDataFormat = "XML";
+            else if (format.equalsIgnoreCase("text/plain")) 
+                this.getDataFormat = "TEXT";
+            else if (format.equalsIgnoreCase("text/cvs")) 
+                this.getDataFormat = "TEXT";
+        }
+        public String getGetDataFormat()
+        {
+            return getDataFormat;
+        }
         public String getShortName()
         {
             return shortName;

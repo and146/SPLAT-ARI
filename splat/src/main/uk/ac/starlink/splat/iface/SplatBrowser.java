@@ -2027,7 +2027,7 @@ public class SplatBrowser
             SpecData spectra[] =
                 specDataFactory.expandXMLSED( props.getSpectrum() );
             for ( int i = 0; i < spectra.length; i++ ) {
-                addSpectrum( spectra[i], props.getSourceType() );
+            	addSpectrum( spectra[i], props.getSourceType() );
                 props.apply( spectra[i] );
             }
         }
@@ -2036,11 +2036,12 @@ public class SplatBrowser
             try {      
                 String specstr = props.getSpectrum();
                 SpecData spectrum;
+                
                 if ( specstr.contains("REQUEST=getData"))
                     spectrum = specDataFactory.get( props.getSpectrum(), props.getGetDataFormat() );
                 else
                     spectrum = specDataFactory.get( props.getSpectrum(), props.getType() );
-                addSpectrum( spectrum );
+                addSpectrum( spectrum, props.getSourceType() );
                 props.apply( spectrum );
             }
            // catch (Exception e ) {
@@ -2054,10 +2055,10 @@ public class SplatBrowser
                     specpath=props.getSpectrum();
                     
                 //  Could be a FITS table with an SED representation.
-                  if ( props.getType() == SpecDataFactory.FITS || se.getType() == SpecDataFactory.FITS) {
+                if ( props.getType() == SpecDataFactory.FITS || se.getType() == SpecDataFactory.FITS) {
                         SpecData spectra[] = specDataFactory.expandFITSSED( specpath, se.getRows() );
                         for ( int i = 0; i < spectra.length; i++ ) {
-                            addSpectrum( spectra[i] );
+                            addSpectrum( spectra[i], props.getSourceType() );
                             props.apply( spectra[i] );
                         }
                     } 
@@ -2258,6 +2259,7 @@ public class SplatBrowser
             for ( int i = 0; i < specIndices.length; i++ ) {
             	SpecData spectrum = globalList.getSpectrum( specIndices[i] );
             	SourceType sourceType = globalList.getSourceType(spectrum);
+
             	switch(sourceType) {
             		case SAMP:
             			if (samePlotForSampSpectra)

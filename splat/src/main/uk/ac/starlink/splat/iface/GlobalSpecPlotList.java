@@ -544,11 +544,13 @@ public class GlobalSpecPlotList
      * @return PlotControl that has been used for the sourceType last time (or NULL if none)
      */
     public PlotControl getLastPlotForSourceType(SourceType sourceType) {
+
     	PlotControl plotControl = sourceTypesLastPlots.get(sourceType);
     	if (plotControl != null) {
     		if (!((JFrame) SwingUtilities.getWindowAncestor(plotControl)).isVisible())
     			return null;
     	}
+
     	return plotControl;
     }
     

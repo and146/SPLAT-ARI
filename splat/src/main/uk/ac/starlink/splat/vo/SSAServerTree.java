@@ -1,13 +1,12 @@
 package uk.ac.starlink.splat.vo;
 
-
-
 import java.awt.BorderLayout;
 import java.awt.Checkbox;
 import java.awt.CheckboxGroup;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
@@ -20,6 +19,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,6 +31,7 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -115,8 +116,6 @@ import javax.swing.SwingConstants;
 
 
 
-
-
 /**
  * SSAServerTree is a panel displaying the SSA servers as a tree, with the server capabilities as branches,
  * and information as leaves . Includes also selection options for the servers, as waveband and data source options
@@ -126,7 +125,6 @@ import javax.swing.SwingConstants;
  * @version $Id: SSAServerTree.java 10350 2012-11-15 13:27:36Z mcneves $
  *
  */
-
 
 
 public class SSAServerTree extends JPanel  implements PropertyChangeListener {
@@ -156,6 +154,8 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
      */
     protected ServerParamRelation serverParam;
     
+    /* where to save the tags information */
+    private String tagsFile = "defaultTags.xml";
     
     /**
      * The object that manages the actual list of servers.
@@ -189,8 +189,7 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
     
     private  int WIDTH = 300;
     private  int HEIGHT = 700;
-    private int  TAB_HEIGHT = 150;
-   
+    private int  TAB_HEIGHT = 180;
    
     CheckBoxListener checkBoxlistener = null;
   
@@ -301,30 +300,38 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
       
        
        // Data Source
+       JPanel srcAllPanel = new JPanel(new GridBagLayout());
+  
        JPanel srcPanel = new JPanel (new GridLayout(2, 3));
-       srcPanel.setBorder ( BorderFactory.createTitledBorder( "Source" ) );
        
-       JCheckBox src_obs = new JCheckBox("Survey", true);
-       src_obs.setToolTipText("<html>A survey dataset, which typically covers some region of observational <br>" +
+   //    JPanel srcPanel = new JPanel (new GridBagLayout());
+       srcAllPanel.setBorder ( BorderFactory.createTitledBorder( "Source" ) );
+       GridBagConstraints c = new GridBagConstraints();
+       c.fill = GridBagConstraints.HORIZONTAL;
+                   
+       JCheckBox src_sur = new JCheckBox("Survey", true);
+       src_sur.setToolTipText("<html>A survey dataset, which typically covers some region of observational <br>" +
        		                   "parameter space in a uniform fashion, with as complete as possible <br>" +
        		                   "coverage in the region of parameter space observed.</html>");
-       srcPanel.add(src_obs);       
-       src_obs.setName("src_obs");
-       src_obs.addItemListener(checkBoxlistener);
-       treeRenderer.addSrc(src_obs.getText());
+       srcPanel.add(src_sur);       
+       src_sur.setName("src_sur");
+       src_sur.addItemListener(checkBoxlistener);
+       treeRenderer.addSrc(src_sur.getText());
        
-       JCheckBox src_theo = new JCheckBox("Theory", true);
-       src_theo.setToolTipText("<html>Theory data, or any data generated from a theoretical model, <br>for example a synthetic spectrum.</html>");
-       srcPanel.add(src_theo);
-       src_theo.setName("src_theo");
-       src_theo.addItemListener(checkBoxlistener);
-       treeRenderer.addSrc(src_theo.getText());
+       JCheckBox src_tmod = new JCheckBox("Theory", true);
+       src_tmod.setToolTipText("<html>Theory data, or any data generated from a theoretical model, <br>for example a synthetic spectrum.</html>");
+    
+       srcPanel.add(src_tmod);
+       src_tmod.setName("src_tmod");
+       src_tmod.addItemListener(checkBoxlistener);
+       treeRenderer.addSrc(src_tmod.getText());
        
        JCheckBox src_point = new JCheckBox("Pointed", true);
        src_point.setToolTipText("<html>A pointed observation of a particular astronomical object or field. <br> " +
        		                    " Typically these are instrumental observations taken as part of some PI observing program.<br> " +
        		                    " The data quality and characteristics may be variable, but the observations of a particular <br>" +
        		                    " object or field may be more extensive than for a survey.</html>");
+
        srcPanel.add(src_point);
        src_point.setName("src_point");
        src_point.addItemListener(checkBoxlistener);
@@ -332,6 +339,7 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
        
        JCheckBox src_cust = new JCheckBox("Custom", true);
        src_cust.setToolTipText("Data which has been custom processed, e.g., as part of a specific research project.");
+    
        srcPanel.add(src_cust);
        src_cust.setName("src_cust");
        src_cust.addItemListener(checkBoxlistener);
@@ -340,19 +348,49 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
        JCheckBox src_art = new JCheckBox("Artificial", true);
        src_art.setToolTipText("<html>Artificial or simulated data.  This is similar to theory data but need not be based <br>" +
        		                    "on a physical model, and is often used for testing purposes.</html>");
+ 
        srcPanel.add(src_art);
        src_art.setName("src_art");
        src_art.addItemListener(checkBoxlistener);
        treeRenderer.addSrc(src_art.getText());
-       
+      
        JCheckBox src_all = new JCheckBox("ALL", false);
        src_all.setToolTipText("All servers (including the ones with no data source set)");
+
        srcPanel.add(src_all);
        src_all.setName("src_all");
        src_all.addItemListener(checkBoxlistener);
        treeRenderer.addSrc(src_all.getText());
        
-       optionsPanel.add(srcPanel);       
+     
+       JPanel srcPanel2 = new JPanel (new GridLayout(1, 2));
+       JCheckBox src_obs = new JCheckBox("All Observational", false);
+       src_obs.setToolTipText("<html>All observation servers.</html>");
+      
+       srcPanel2.add(src_obs);       
+       src_obs.setName("src_obs");
+       src_obs.addItemListener(checkBoxlistener);
+       treeRenderer.addSrc(src_obs.getText());
+       
+       JCheckBox src_theo = new JCheckBox("All Theoretical", false);
+       src_theo.setToolTipText("<html>All theoretical servers.</html>");
+    
+       srcPanel2.add(src_theo);
+       src_theo.setName("src_theo");
+       src_theo.addItemListener(checkBoxlistener);
+       treeRenderer.addSrc(src_theo.getText());
+       
+       ButtonGroup group = new ButtonGroup();
+       group.add(src_obs);
+       group.add(src_theo);
+       c.weightx=1;
+       c.gridy = 0;
+      
+       srcAllPanel.add( srcPanel, c);
+       c.gridy = 1;
+       srcAllPanel.add( srcPanel2, c);
+       
+       optionsPanel.add(srcAllPanel);       
        optionsPanel.add(bandPanel);
      
        optionTabs.addTab("Options", optionsPanel);
@@ -420,8 +458,18 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
          
         ServerTreeNode root = new ServerTreeNode("SSAP Servers");
         populateTree(root);
-
+      
+      
         serverTree = new JTree(root);
+        DefaultTreeModel model = (DefaultTreeModel) serverTree.getModel();
+       
+        try {
+            restoreTags();
+        } catch (SplatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        model.reload();
         serverTree.expandRow(0);
         serverTree.updateUI();
        // serverTree.setVisibleRowCount(30);
@@ -740,6 +788,12 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         ServerTreeNode root = (ServerTreeNode) model.getRoot(); 
         root.removeAllChildren();
         populateTree(root);
+        try {
+            restoreTags();
+        } catch (SplatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         model.reload();
         serverTree.updateUI();
       // registryTable.setData( serverList.getData() );
@@ -776,6 +830,12 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         public void actionPerformed( ActionEvent ae )
         {
             addNewTag();
+            try {
+                  saveServerTags();
+            } catch (SplatException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }          
         }
     }
     
@@ -823,6 +883,12 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         public void actionPerformed( ActionEvent ae )
         {
             saveServers();
+            try {
+                saveServerTags();
+            } catch (SplatException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1169,6 +1235,7 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
             return;
         }
         
+        
         DefaultTreeModel model = (DefaultTreeModel) serverTree.getModel();
         ServerTreeNode root = (ServerTreeNode)  model.getRoot();
         int[] selected = serverTree.getSelectionRows();
@@ -1191,21 +1258,11 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         tagsList.setSelectedValue(tagname, true);
        
         treeRenderer.addTag(tagname);
-        
- 
-    //    userTags.add(tag);
-       // tag.setSelected(true);
-  //      treeRenderer.addTag(tagdescr);
-        
-   //     tagsPanel.add(tag);
-     //   tagsList.revalidate();
-    //    tagsList.repaint();
+
         this.repaint();      
-        //to do save / reload user tags!!!!!!!!!!!!!!!!!!!
-        // to do delete user tags
-        
+
     }
-    
+  
     /**
      *  Add new tag to the server list
      */
@@ -1229,10 +1286,137 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         }
  
         treeRenderer.removeTag(tagname) ;
+        try {
+            saveServerTags();
+        } catch (SplatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         this.repaint();      
         //to do save / reload user tags!!!!!!!!!!!!!!!!!!!       
     }
     
+    /**
+     *  Save tag information to a file
+     */
+    public void saveServerTags() throws SplatException { 
+        
+        File tagfile = Utilities.getConfigFile(tagsFile);
+        OutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream( tagfile );
+        }
+        catch (FileNotFoundException e) {
+            throw new SplatException( e );
+        }
+        XMLEncoder encoder = new XMLEncoder( outputStream );
+        DefaultTreeModel model = (DefaultTreeModel) serverTree.getModel();
+        ServerTreeNode root = (ServerTreeNode)  model.getRoot();
+        for (int i=0; i<root.getChildCount(); i++) {
+            ServerTreeNode currentNode = (ServerTreeNode) model.getChild(root, i);
+            if ( currentNode.hasTags() ) {
+                
+            //    ServerTags st = new ServerTags(currentNode.getShortName(), currentNode.getTags());
+                ServerTags st = new ServerTags(currentNode.getShortName(), currentNode.getTags());
+                
+                try {
+                    encoder.writeObject(st);
+                } 
+                catch (Exception e) {
+                        e.printStackTrace();
+                }  
+            }
+        }
+        encoder.close();        
+    }
+    
+    /**
+     * Initialise the known servers which are kept in a resource file along
+     * with SPLAT. The format of this file is determined by the
+     * {@link XMLEncode} form produced for an {@link SSAPRegResource}.
+     */
+    protected void restoreTags()
+        throws SplatException
+    {
+        //  Locate the description file. This may exist in the user's
+        //  application specific directory or, the first time, as part of the
+        //  application resources.
+        //  User file first.
+        File backingStore = Utilities.getConfigFile( tagsFile );
+        InputStream inputStream = null;
+        if ( backingStore.canRead() ) {
+            try {
+                inputStream = new FileInputStream( backingStore );
+            }
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+     //   boolean restored = false;
+        if ( inputStream != null ) {
+            restoreTags( inputStream );
+            try {
+                inputStream.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }  
+        /**
+         * Read an InputStream that contains a list of servers to restore.
+         */
+        protected void restoreTags( InputStream inputStream )
+            throws SplatException
+        {
+            XMLDecoder decoder = new XMLDecoder( inputStream );
+            boolean ok = true;
+            ServerTags st = null;
+            
+       
+            DefaultTreeModel model = (DefaultTreeModel) serverTree.getModel();
+            ServerTreeNode root = (ServerTreeNode)  model.getRoot();
+         
+          
+        
+            while ( true ) {
+                try {
+                    st = (ServerTags) decoder.readObject();
+                    // search for shortname
+                    for (int i=0; i<root.getChildCount(); i++) { 
+                        
+                        ServerTreeNode node = (ServerTreeNode) model.getChild(root, i); 
+                        if (st.getName().equals(node.getShortName())) {
+                            ArrayList<String> tags = st.getTags();
+                            for (int t=0; t<tags.size(); t++) {
+                                String tagname = tags.get(t);
+                                node.addTag(tagname);
+                                if ( ! tagsListModel.contains(tagname) )
+                                    tagsListModel.addElement(tagname);
+                           ////     tagsList.setSelectedValue(tagname, true);
+                                treeRenderer.addTag(tagname);
+                            }
+                        }
+                    }
+                    //!!!!!addServer(server, false);
+                }
+                catch( ArrayIndexOutOfBoundsException e ) {
+                    break; // End of list.
+                }
+                catch ( NoSuchElementException e ) {
+                    System.out.println( "Failed to read server list " +
+                                        " (old-style or invalid):  '" +
+                                        e.getMessage() + "'"  );
+                    ok = false;
+                    break;
+                }
+            }
+            decoder.close();
+            model.reload();
+          
+        }
+    
+      
     /**
      * Event listener to trigger a list update when a new server is
      * added to addServerWIndow
@@ -1249,7 +1433,6 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         return serverList;
     }
     
-
   
     /**
      * Set the proxy server and port.
@@ -1284,7 +1467,12 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         }
         
         public void addTag(String tag) {
+            addTag(tag, true);
+            
+        }
+        public void addTag(String tag, boolean save) {
             tags.add(tag);
+           
         }
         
         private boolean containsTag(String tag) {
@@ -1304,12 +1492,25 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
    //         sortingTag="";
            
    //     }
-       
+        protected boolean hasTags() {
+            return (tags.size() > 0);
+        }
+        protected ArrayList<String> getTags() {
+            return (tags);
+        }
         
         public String toString() {
            
                 return getUserObject().toString();
           
+        }
+        public String getShortName() {
+            String shortname=getUserObject().toString(); ///!!!!!!
+            int end = shortname.indexOf("[");
+            if (end >0)
+                shortname = shortname.substring(0,end).trim();
+            else shortname = shortname.trim();
+            return shortname;
         }
         
         public boolean isSelected() {
@@ -1377,6 +1578,22 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
             }
             return null;           
         }   
+        public String getDataType () {
+            
+            if (this.getLevel() != 1)
+                return null;
+            // capabilities is the last node
+            DefaultMutableTreeNode capnode = (DefaultMutableTreeNode) this.getLastChild();
+           
+            Enumeration<DefaultMutableTreeNode> e = capnode.children();
+            while (e.hasMoreElements()) {
+                String nodeLabel = e.nextElement().getUserObject().toString();
+                if (nodeLabel.startsWith("Data Type: ")) {
+                    return nodeLabel.replace("Data Type: ", "");
+                }
+            }
+            return null;           
+        }   
         
    
     } // class servertreenode
@@ -1390,6 +1607,8 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         private boolean allBands = false;
         private boolean allSources = false;
         private boolean selectTags = false; // if not use options selection
+        private boolean allObsSources = false;
+        private boolean allTheoSources = false;
 
         public ServerTreeCellRenderer () {
             super();
@@ -1438,14 +1657,9 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
                     }
                 }
                 return c; //empty;
-           // if (containsMatchingChild(node)) {
-          //      c.setForeground(Color.BLACK);
-           //     return c;
-           // }
-          //  }else 
-               // c.setForeground(Color.GRAY);
+        
             }
-           // c.setForeground(Color.GRAY);
+         
             return c;
             
         }//
@@ -1473,8 +1687,20 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         private boolean matchesSrcFilter(ServerTreeNode node) {
             if (allSources)
                 return true;
+            
             String srctag = node.getDataSource();
+        
+            if (allTheoSources) {
+                String srctype = node.getDataType();
+                return ( srctag.equalsIgnoreCase("theory") || srctag.equalsIgnoreCase("artificial") || (srctag.equalsIgnoreCase("custom") && srctype.equalsIgnoreCase("simulation")));
+            }
+            if (allObsSources) {
+                String srctype = node.getDataType();
+                return ( ! (srctag.equalsIgnoreCase("theory") || srctag.equalsIgnoreCase("artificial") || (srctag.equalsIgnoreCase("custom") && srctype.equalsIgnoreCase("simulation"))));                  
+            }
+
             for (int i=0;i< srcList.size(); i++) {
+              
                 if (srctag.equalsIgnoreCase(srcList.get(i)))
                     return true;
             }
@@ -1521,6 +1747,13 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         public void setAllSources( boolean set) {
             allSources = set;
         }
+        public void setAllObsSources( boolean set) {
+            allObsSources = set;
+        }
+        public void setAllTheoSources( boolean set) {
+            allTheoSources = set;
+        }
+      
       
         public void setTagsSelection( boolean sel) {
             selectTags = sel;
@@ -1528,6 +1761,8 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
    
     }
     
+   
+            
     //Listens to the check boxes events
     class CheckBoxListener implements ItemListener {
         public void itemStateChanged(ItemEvent e) {
@@ -1544,7 +1779,13 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
                     if (name.startsWith("src") ) {
                         if (src.equals("ALL"))
                             treeRenderer.setAllSources(true);
-                        else
+                        else  if (src.equals("All Observational")) {
+                            treeRenderer.setAllObsSources(true);                           
+                        }
+                        else if (src.equals("All Theoretical")) {
+                            treeRenderer.setAllTheoSources(true);
+                        }
+                        else 
                             treeRenderer.addSrc(src);                       
                     } else { // band
                         if (src.equals("ALL"))
@@ -1558,7 +1799,11 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
                     } else if (name.startsWith("src")) {
                         if (src.equals("ALL"))
                             treeRenderer.setAllSources(false);
-                        else
+                        else   if (src.equals("All Observational"))
+                            treeRenderer.setAllObsSources(false);
+                        else if (src.equals("All Theoretical")) 
+                            treeRenderer.setAllTheoSources(false);
+                        else 
                             treeRenderer.removeSrc(src); 
                     } else {
                         
@@ -1595,7 +1840,5 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
                 
             } // valueChanged
     } // TagsListSelectionListener
-
-            
 
 }

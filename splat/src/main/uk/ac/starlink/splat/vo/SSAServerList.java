@@ -376,7 +376,7 @@ public class SSAServerList
        * returns selection tag
        */
        public boolean isServerSelected(String shortname) {
-           if (serverList.containsKey(shortname))
+           if (serverList.containsKey(shortname) && shortname != null)
                    return selectionList.get(shortname);
            return false;
        }

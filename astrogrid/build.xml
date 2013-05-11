@@ -383,8 +383,8 @@
            debug="${debug}"
            deprecation="${deprecation}"
            source="${source.version}"
-           optimize="${optimize}"
-           target="${target.version}">
+           target="${target.version}"
+           optimize="${optimize}">
 
       <classpath refid="classpath"/>
       <compilerarg value="-proc:none" compiler="javac1.6"/>

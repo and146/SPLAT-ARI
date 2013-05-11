@@ -458,7 +458,7 @@ public class FITSSpecDataImpl
         }
         try {
             // Create a null FITS object (TODO: deal with prior existence?).
-            
+
         	BasicHDU hdu = makeHDU();
 
             //  Write the HDU (data and header) to the file.

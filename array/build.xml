@@ -362,8 +362,8 @@
            debug="${debug}"
            deprecation="${deprecation}"
            source="${source.version}"
-           optimize="${optimize}"
-           target="${target.version}">
+           target="${target.version}"
+           optimize="${optimize}">
 
       <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="classpath"/>
@@ -411,8 +411,8 @@
     <mkdir dir="${build.dir}/prep"/>
     <javac srcdir="${src.dir}/prep"
            destdir="${build.dir}/prep"
-           source="${source.version}"
-           target="${target.version}">
+           target="${target.version}"
+           source="${source.version}">
     </javac>
     <java classname="WriteConvertWorker" 
           classpath="${build.dir}/prep"
@@ -884,8 +884,8 @@
            destdir="${build.tests}"
            debug="${debug}"
            source="${source.version}"
-           deprecation="${deprecation}" 
-           target="${target.version}">
+           target="${target.version}"
+           deprecation="${deprecation}" >
       <compilerarg value="-proc:none" compiler="javac1.6"/>
       <classpath refid="tests-classpath"/>
     </javac>

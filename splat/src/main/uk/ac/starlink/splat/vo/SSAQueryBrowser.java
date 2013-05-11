@@ -154,7 +154,7 @@ import javax.xml.transform.sax.SAXSource;
  * @author Peter W. Draper
  * @author Mark Taylor
  * @author Margarida Castro Neves 
- * @version $Id$
+ * @version $Id: SSAQueryBrowser.java 10547 2013-04-10 15:10:07Z mcneves $
  *
  */
 public class SSAQueryBrowser
@@ -1513,6 +1513,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
      
         boolean hasParams = false;
        
+        ImageIcon cutImage = new ImageIcon( ImageHolder.class.getResource("smallcutter.gif") );
    
         if ( next instanceof SSAQuery && next != null ) {
             ssaQuery = (SSAQuery) next;
@@ -1553,15 +1554,16 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                 scrollPane = new JScrollPane( table );
               //  scrollPane.setPreferredSize(new Dimension(600,400));
                 if (getDataTable != null) {
-                    shortName = "✂ " + shortName;
+		  
                     if ( getDataFrame == null )
                         getDataFrame = new GetDataQueryFrame();
                     getDataFrame.addService(shortName, getDataTable);
                     getDataButton.setEnabled(true);
                     getDataButton.setVisible(true);
                     getDataButton.setForeground(Color.GRAY);
+                    resultsPane.addTab( shortName, cutImage, scrollPane );
                 }
-                resultsPane.addTab( shortName, scrollPane );
+                else resultsPane.addTab( shortName, scrollPane );
                 starJTables.add( table );
 
                 //  Set widths of columns.
@@ -1805,6 +1807,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                         String value = getDataParam.get(key);
                                 if (value == null || value.length() > 0) {
                                     try {//
+                                       
                                         ///
                                         // float specstart = Float.parseFloat(rseq.getCell( linkcol ).);
                                        //  float specstop = Float.parseFloat();
@@ -1995,6 +1998,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
                                        String format = getDataParam.get("FORMAT");
                                        if (format != "")
                                            props.setGetDataFormat(format);
+                                       props.setShortName(props.getShortName() + " [" + getDataParam.get("BAND") + "]" );
                                     }
                                 }
                                 specList.add( props );
@@ -2560,7 +2564,7 @@ implements ActionListener, MouseListener, DocumentListener, PropertyChangeListen
         int nrTabs = resultsPane.getTabCount();
         for(int i = 0; i < nrTabs; i++)
         {
-           if ( ! resultsPane.getTitleAt(i).startsWith("✂") ) 
+           if (resultsPane.getIconAt(i) == null) 
                resultsPane.setEnabledAt(i, false);
            else 
                resultsPane.setSelectedIndex(i);

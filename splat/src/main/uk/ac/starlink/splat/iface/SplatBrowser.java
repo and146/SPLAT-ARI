@@ -1061,7 +1061,7 @@ public class SplatBrowser
             ( "Search for spectral coordinates when necessary" );
         searchCoordsItem.addItemListener( this );
     }
-    
+
     /**
      * Create the Interop menu and populate it with appropriate actions.
      */
@@ -1757,7 +1757,6 @@ public class SplatBrowser
             
             stackChooser.addChoosableFileFilter
                 ( stackChooser.getAcceptAllFileFilter() );
-            
         }
         if ( openDialog ) {
             if ( stackOpenAccessory == null ) {
@@ -2036,7 +2035,6 @@ public class SplatBrowser
             try {      
                 String specstr = props.getSpectrum();
                 SpecData spectrum;
-                
                 if ( specstr.contains("REQUEST=getData"))
                     spectrum = specDataFactory.get( props.getSpectrum(), props.getGetDataFormat() );
                 else

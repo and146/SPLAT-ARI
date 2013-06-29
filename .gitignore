@@ -1,0 +1,17 @@
+/*/bin/
+/*/build/
+/*/docs/
+/*/etc/
+/*/lib/
+/*/.*.install
+*.orig
+!/ant/bin/
+!/ant/docs/
+!/ant/etc/
+!/ant/lib/
+!/axis/docs/
+!/jetty/docs/
+!/jsamp/docs/
+!/junit/docs/
+!/src/docs/
+!/src/etc/

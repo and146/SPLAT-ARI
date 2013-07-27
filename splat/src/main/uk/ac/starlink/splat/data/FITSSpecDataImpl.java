@@ -49,14 +49,23 @@ public class FITSSpecDataImpl
 //
 //  Implementation of SpecDataImpl methods.
 //
-    /**
+	/**
      * Constructor - open a FITS file by file name.
      */
     public FITSSpecDataImpl( String fileName )
         throws SplatException
     {
+        this(fileName, 0);
+    }
+	
+	/**
+     * Constructor - open a FITS file by file name.
+     */
+    public FITSSpecDataImpl( String fileName, int hdunum )
+        throws SplatException
+    {
         super( fileName );
-        hdunum = 0;
+        this.hdunum = hdunum;
         openForRead( fileName );
     }
 
@@ -66,8 +75,17 @@ public class FITSSpecDataImpl
     public FITSSpecDataImpl( String fileName, SpecData source )
         throws SplatException
     {
+        this(fileName, source, 0);
+    }
+    
+    /**
+     * Constructor, creating an object by cloning another.
+     */
+    public FITSSpecDataImpl( String fileName, SpecData source, int hdunum )
+        throws SplatException
+    {
         super( fileName );
-        hdunum = 0;
+        this.hdunum = hdunum;
         fullName = fileName;
         makeMemoryClone( source );
     }
@@ -305,7 +323,8 @@ public class FITSSpecDataImpl
     {
         //  Parse the name to extract the HDU reference.
         PathParser namer = new PathParser( fileName );
-        hdunum = namer.fitshdunum();
+        if (hdunum <= 0) // if hdunum is >0, it means it was required explicitly (assuming user knows what he's doing) 
+        	hdunum = namer.fitshdunum();
         String name = null;
         if ( namer.type().equals( ".sdf" ) && ! namer.path().equals( "" ) ) {
             // Probably not a ".fits" or ".fit" extension. Shouldn't

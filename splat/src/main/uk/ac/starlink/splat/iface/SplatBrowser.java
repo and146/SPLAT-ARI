@@ -67,6 +67,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
+import org.astrogrid.acr.InvalidArgumentException;
+
 import uk.ac.starlink.ast.gui.ScientificFormat;
 import uk.ac.starlink.splat.data.EditableSpecData;
 import uk.ac.starlink.splat.data.NameParser;
@@ -1655,13 +1657,14 @@ public class SplatBrowser
             if ( !file.exists() || ( file.exists() && file.canWrite() ) ) {
                 SpecList specList = SpecList.getInstance();
                 
-                SpecList.FileFormat fileFormat = SpecList.FileFormat.STK;
-                for (SpecList.FileFormat ff : SpecList.FileFormat.values()) {
+                //SpecList.FileFormat fileFormat = SpecList.FileFormat.STK;
+                /*for (SpecList.FileFormat ff : SpecList.FileFormat.values()) {
                 	if (stackChooser.getFileFilter().getDescription().startsWith(ff.getDescription())) {
                 		fileFormat = ff;
                 		break;
                 	}
-                }
+                }*/
+                SpecList.FileFormat fileFormat = getFileFormat(stackChooser, SpecList.FileFormat.STK);
                 
                 specList.writeStack( fileFormat, file.getPath() );
             }
@@ -1685,7 +1688,8 @@ public class SplatBrowser
         if ( result == stackChooser.APPROVE_OPTION ) {
             File file = stackChooser.getSelectedFile();
             if ( file.exists() && file.canRead() ) {
-                readStack( file, stackOpenDisplayCheckBox.isSelected() );
+            	SpecList.FileFormat fileFormat = getFileFormat(stackChooser, SpecList.FileFormat.STK, true);
+            	readStack( file, fileFormat, stackOpenDisplayCheckBox.isSelected() );
             }
             else {
                 JOptionPane.showMessageDialog
@@ -1704,8 +1708,21 @@ public class SplatBrowser
      */
     public int readStack( File file, boolean display )
     {
-        try {
-            return readStack( new FileInputStream( file ), display );
+        return readStack(file, SpecList.FileFormat.STK, display);
+    }
+    
+    /**
+     * Read and optionally display a file containing a stack of spectra.
+     *
+     * @param file containing serialized SpecList instance.
+     * @param fileFormat Format of input stack file
+     * @param display whether to display the new spectra in a new plot.
+     * @return the index of the plot created, -1 otherwise.
+     */
+    public int readStack( File file, SpecList.FileFormat fileFormat, boolean display )
+    {
+    	try {
+            return readStack( new FileInputStream( file ), fileFormat, display, file.getPath() );
         }
         catch (Exception e) {
             logger.log( Level.SEVERE, e.getMessage(), e );
@@ -1723,16 +1740,44 @@ public class SplatBrowser
      */
     public int readStack( InputStream in, boolean display )
     {
+        return readStack(in, SpecList.FileFormat.STK, display, null);
+    }
+    
+    /**
+     * Read and optionally display an InputStream that contains a stack of
+     * spectra.
+     *
+     * @param in stream with serialized SpecList instance.
+     * @param fileFormat Format of input stack file
+     * @param display whether to display the new spectra in a new plot.
+     * @return the index of the plot created, -1 otherwise.
+     */
+    public int readStack( InputStream in, SpecList.FileFormat fileFormat, boolean display, String sourcePath )
+    {
         int plotIndex = -1;
+        
+        if (fileFormat == null)
+        	return plotIndex;
+        
         SpecList globalSpecList = SpecList.getInstance();
-        int nread = globalSpecList.readStack( in );
-
+        int nread = 0;
+        
+        switch (fileFormat) {
+        	case STK:
+                nread = globalSpecList.readStack( in );
+        		break;
+        	case FITS:
+        		nread = globalSpecList.readStack(sourcePath, fileFormat, this);
+        		break;
+        }
+        
         //  If requested honour the display option.
         if ( ( nread > 0 ) && display ) {
             int count = globalList.specCount();
             deSelectAllPlots();
             plotIndex = displayRange( count - nread, count - 1 );
         }
+        
         return plotIndex;
     }
 
@@ -1986,8 +2031,14 @@ public class SplatBrowser
         else {           
                
             try {
-                SpecData spectrum = specDataFactory.get( name, usertype );
-                addSpectrum( spectrum );
+                List<SpecData> spectra = specDataFactory.getAll( name, usertype );
+                if (spectra != null) {
+                	for (SpecData spectrum : spectra) {
+                		addSpectrum( spectrum );
+                	}
+                }
+            	//SpecData spectrum = specDataFactory.get( name, usertype );
+                //addSpectrum( spectrum );
             }
             catch (SEDSplatException e) {
                 if ( usertype == SpecDataFactory.FITS ) {
@@ -2034,13 +2085,20 @@ public class SplatBrowser
               
             try {      
                 String specstr = props.getSpectrum();
-                SpecData spectrum;
-                if ( specstr.contains("REQUEST=getData") && props.getGetDataFormat() != null )
-                    spectrum = specDataFactory.get( props.getSpectrum(), props.getGetDataFormat() );
-                else
-                    spectrum = specDataFactory.get( props.getSpectrum(), props.getType() );
-                addSpectrum( spectrum, props.getSourceType() );
-                props.apply( spectrum );
+                //SpecData spectrum;
+                List<SpecData> spectra;
+                if ( specstr.contains("REQUEST=getData") && props.getGetDataFormat() != null ) {
+                	spectra = specDataFactory.getAll( props.getSpectrum(), props.getGetDataFormat() );
+                	//spectrum = specDataFactory.get( props.getSpectrum(), props.getGetDataFormat() );
+                }
+                else {
+                	spectra = specDataFactory.getAll( props.getSpectrum(), props.getType() );
+                	//spectrum = specDataFactory.get( props.getSpectrum(), props.getType() );
+                }
+                for (SpecData spectrum : spectra) {
+                	addSpectrum( spectrum, props.getSourceType() );
+                	props.apply( spectrum );
+                }
             }
            // catch (Exception e ) {
             catch (SEDSplatException se) {
@@ -3423,5 +3481,71 @@ public class SplatBrowser
         {
             return key;
         }
+    }
+    
+    /**
+     * Determines the selected FileFormat from FileChooser
+     * @param fileChooser BasicFileChooser containing the FileFilter
+     * @param defaultFileFormat FileFormat that will returned if the selected one cannot be determined
+     * @return Selected FileFormat
+     */
+    private SpecList.FileFormat getFileFormat(BasicFileChooser fileChooser, SpecList.FileFormat defaultFileFormat) {
+    	SpecList.FileFormat fileFormat = defaultFileFormat;
+        for (SpecList.FileFormat ff : SpecList.FileFormat.values()) {
+        	if (fileChooser.getFileFilter().getDescription().startsWith(ff.getDescription())) {
+        		fileFormat = ff;
+        		break;
+        	}
+        }
+        
+        return fileFormat;
+    }
+    
+    /**
+     * Determines the selected FileFormat from FileChooser
+     * @param fileChooser BasicFileChooser containing the FileFilter
+     * @param defaultFileFormat FileFormat that will returned if the selected one cannot be determined
+     * @param useExtensionGuessing If FileFormat cannot be determined directly, try to determine it 
+     * 		by guessing it based on selected File's extension
+     * @return Selected FileFormat
+     */
+    private SpecList.FileFormat getFileFormat(
+    		BasicFileChooser fileChooser, 
+    		SpecList.FileFormat defaultFileFormat, 
+    		boolean useExtensionGuessing) {
+    	
+    	SpecList.FileFormat fileFormat = defaultFileFormat;
+    	
+    	SpecList.FileFormat detectedFileFormat = getFileFormat(fileChooser, null);
+    	
+    	if (detectedFileFormat == null && useExtensionGuessing) {
+    		String fileName = fileChooser.getSelectedFile().getName();
+    		String selectedFileExtension = "";
+    		if (fileName != null) {
+    			selectedFileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+    			if (selectedFileExtension != null) {
+    				selectedFileExtension = selectedFileExtension.trim().toLowerCase();
+    			}
+    		}
+    		
+    		for (SpecList.FileFormat ff : SpecList.FileFormat.values()) {
+            	if (selectedFileExtension.equals(ff.getFileExtension().trim().toLowerCase())) {
+            		detectedFileFormat = ff;
+            		break;
+            	}
+            }
+    	}
+    	
+    	if (detectedFileFormat != null)
+    		fileFormat = detectedFileFormat;
+        
+    	for (SpecList.FileFormat ff : SpecList.FileFormat.values()) {
+        	if (fileChooser.getFileFilter().getDescription().startsWith(ff.getDescription())) {
+        		fileFormat = ff;
+        		break;
+        	}
+        }
+        
+        return fileFormat;
     }
 }

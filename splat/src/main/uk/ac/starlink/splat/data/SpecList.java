@@ -31,7 +31,9 @@ import nom.tam.util.Cursor;
 
 import uk.ac.starlink.splat.iface.GlobalSpecPlotList;
 import uk.ac.starlink.splat.iface.SpectrumIO;
+import uk.ac.starlink.splat.iface.SplatBrowser;
 import uk.ac.starlink.splat.iface.SpectrumIO.SourceType;
+import uk.ac.starlink.splat.util.SplatException;
 import uk.ac.starlink.splat.util.Utilities;
 
 /**
@@ -344,11 +346,11 @@ public class SpecList implements Serializable
                                 iter.next();
                             }
                             
-                    		iter.add( "GNRTR", new HeaderCard( "GNRTR", Utilities.getReleaseName(),
+                    		/*iter.add( "GNRTR", new HeaderCard( "GNRTR", Utilities.getReleaseName(),
                     				"SPLAT's list of spectra item" ) );
                     		
                     		iter.add( "GNRTRVER", new HeaderCard( "GNRTRVER", Utilities.getReleaseVersion(),
-                            		"" ) );
+                            		"" ) );*/
                     		
                     		iter.add( "EXTNAME", new HeaderCard( "EXTNAME", "SPECTRUM",
                         		"" ) );
@@ -392,15 +394,52 @@ public class SpecList implements Serializable
      */
     public int readStack( String fileName )
     {
+        return readStack(fileName, FileFormat.STK, null);
+    }
+    
+    /**
+     * Read a previous list of spectra stored as a serialised Gzipped
+     * stream in a disk file (by the writeStack method). All recovered
+     * spectra are append and converted in memory resident objects
+     * (rather than retaining their associated with a disk file,
+     * i.e. NDF, TEXT or FITS spectra).
+     *
+     * @param fileName name of the file containing the data.
+     * @param fileFormat format of the file - STK/FITS/...
+     * @return the number of spectra that are restored.
+     */
+    public int readStack( String fileName, FileFormat fileFormat, SplatBrowser splatBrowser )
+    {
         int restored = 0;
-        try {
-            InputStream file = new FileInputStream( fileName );
-            restored = readStack( file );
-            file.close();
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
+        
+        switch (fileFormat) {
+        	case STK:
+        		try {
+                    InputStream file = new FileInputStream( fileName );
+                    restored = readStack( file );
+                    file.close();
+                } 
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+        		break;
+        	case FITS:
+        		if (fileName != null) {
+        			try {
+        				List<SpecData> spectra = SpecDataFactory.getInstance().getAll(fileName);
+        				for (SpecData spectrum : spectra) {
+        					splatBrowser.addSpectrum(spectrum);
+        				}
+        				restored = spectra.size();
+					} catch (SplatException e) {
+						e.printStackTrace();
+					}
+        		}
+        		break;
+        	
         }
+        
+        
         return restored;
     }
 

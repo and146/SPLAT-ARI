@@ -673,6 +673,11 @@ in the following figure:
  properties for, or want to work with. There's a quick tutorial on
  \htmlref{selecting spectra}{selecting_spectra} in the introductory material
  \latex{(\S\ref{selecting_spectra})}.
+ 
+ Also, each spectrum that is selected by left mouse button get sequentially
+ highlighted in all \labelitem{Plot window}s that it is currently plotted in
+ by few-seconds blinking in inverted color.
+ 
 \end{quote}
 
 \subheading{Properties of current spectra}
@@ -833,6 +838,13 @@ in the following figure:
  relationship between disk files and the spectra in the global list is
  lost. Data saved in a stack are compressed.
 
+ As an alternative, you can save and restore the global stack of spectra
+ to and from diskfile using a standard multi-HDU FITS file, that is recognized
+ by \SPLAT and many other tools, which allows you to perform an analysis
+ and work with the stack of spectra in another tools. Each spectrum is represented
+ by an IMAGE extension in produced FITS file. Please note, that saving in
+ this format will not keep the \SPLAT -specific settings like line colors etc.
+
  The \menuitem{Interop} menu contains items for communicating with other
  PLASTIC- or SAMP-aware desktop applications. This is described in the
  \htmlref{Tool interoperability}{interop} section
@@ -953,6 +965,14 @@ the display area.\\
 
   \item Drop target: you can drop any spectra dragged from the global
   list and they will be displayed.
+  
+  \item Visual spectrum selection: you can click by left mouse button 
+  inside the plot window and \SPLAT will automatically select the closest 
+  spectrum. The spectrum gets selected in the \labelitem{Displaying:} 
+  control, and in the \labelitem{Global list of spectra} in the 
+  \labelitem{browser window}. The selected spectrum gets (based on the 
+  number of plotted spectra) immediately highlighted by few-seconds 
+  blinking in inverted color.
 
  \end{itemize}
 \end{quote}
@@ -1083,6 +1103,10 @@ the display area.\\
   \item[\inline{regioncutter}] Show the region cutter window. This
   window allows you to graphically define which regions you'd like to
   cut, delete or replace by linear interpolation in the current spectrum.
+  You can save (and read) the defined ranges to a simple text file for 
+  a later usage. The spectra that gets affected by the cutter can be
+  selected as any subset of the spectra plotted in the current
+  \labelitem{Plot window}.
 
   \item[\inline{fitback}] Show the toolbox for fitting a polynomial to
   defined regions of the current spectrum. This is used to define
@@ -3760,6 +3784,13 @@ You can also send the results of an SSA query as a table from the
 \labelitem{Query VO for spectra} window.  Again, use the
 \menuitem{Broadcast} and \menuitem{Send} options from the
 \menuitem{Interop} menu to do this.
+
+By default, all spectra received by \SPLAT via SAMP are plotted to
+their own plot windows. To plot them all to a single (common) plot 
+window, check the \menuitem{Same window for SAMP spectra...} setting
+from the \menuitem{Interop} menu. By checking and unchecking this
+setting, you can easily plot bulks of the spectra received via
+SAMP to several different plot windows.
 
 SAMP and PLASTIC do much the same job as each other, and work in
 much the same way.  SAMP is an evolution of PLASTIC with a number

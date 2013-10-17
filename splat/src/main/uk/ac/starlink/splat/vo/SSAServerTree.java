@@ -11,6 +11,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -44,6 +47,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
@@ -161,9 +165,9 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
      * The object that manages the actual list of servers.
      */
     private JTree serverTree;
-    private JPanel treePanel;
+   // private JPanel treePanel;
     private JPanel mainPanel;
-    private JPanel buttonsPanel;
+   // private JPanel buttonsPanel;
     private JPanel controlPanel;
     
     
@@ -177,6 +181,16 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
     private JCheckBox band_xr;
     private JCheckBox band_gr;
     private JCheckBox band_all;
+    private JCheckBox src_theo = null;
+    private JCheckBox src_obs = null;
+    private JCheckBox src_sur;
+    private JCheckBox src_tmod;
+    private JCheckBox src_point;
+    private JCheckBox src_cust;
+    private JCheckBox src_art;
+    private JCheckBox src_all;
+    private JCheckBox src_inv;
+
     
     // user defined tags
     private ArrayList<JCheckBox> userTags;
@@ -187,12 +201,13 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
     
     // sizes
     
-    private  int WIDTH = 300;
-    private  int HEIGHT = 700;
+    private  int WIDTH = 600;
+    private  int HEIGHT = 500;
     private int  TAB_HEIGHT = 180;
+    private int  BUTTONS_HEIGHT = 80;
    
-    CheckBoxListener checkBoxlistener = null;
-  
+    private CheckBoxListener checkBoxlistener = null;
+   
     
     /** The cell tree renderer */
     ServerTreeCellRenderer treeRenderer ;
@@ -211,6 +226,7 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
     public SSAServerTree( SSAServerList serverList, ServerParamRelation spr )
     {
       
+        this.addComponentListener(new resizeListener());
         this.serverList = serverList;
         this.serverParam = spr;
         initUI();
@@ -226,36 +242,39 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
     protected void initUI()
     {
     
-       this.setPreferredSize(new Dimension(this.WIDTH,this.HEIGHT));
+      // this.setPreferredSize(new Dimension(this.WIDTH,this.HEIGHT));
+ //      this.setMinimumSize(new Dimension(this.WIDTH-300,this.HEIGHT-300));
        setLayout( new BorderLayout() );
-       optionTabs = new JTabbedPane();
-      
-       JPanel optionsPanel = new JPanel();      
-       optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
-    //   optionsPanel.setBorder ( BorderFactory.createTitledBorder( "Server Options" ) );
-       optionsPanel.setPreferredSize(new Dimension(this.WIDTH,this.TAB_HEIGHT));
        
+       optionTabs = new JTabbedPane();
+       JScrollPane optionsScroller = new JScrollPane();
+       
+       JPanel invOptionsPanel = new JPanel(); // invisible, just to adjust size of frames
+       JPanel optionsPanel = new JPanel(new GridBagLayout());
+       GridBagConstraints gbcOptions = new GridBagConstraints();
+    
        treeRenderer = new ServerTreeCellRenderer();
        checkBoxlistener = new CheckBoxListener();
        
        // BAND
-       JPanel bandPanel = new JPanel (new GridLayout(3,3));
+    
+       JPanel bandPanel = new JPanel (new GridLayout(5,2));
        bandPanel.setBorder ( BorderFactory.createTitledBorder( "Wave Band" ) );
-       band_rad = new JCheckBox( "Radio", true);
+       band_rad = new JCheckBox( "Radio", false);
        bandPanel.add(band_rad);
-       band_mm = new JCheckBox( "Millimeter",  true);
+       band_mm = new JCheckBox( "Millimeter",  false);
        bandPanel.add(band_mm);
-       band_ir = new JCheckBox( "Infrared",  true);
+       band_ir = new JCheckBox( "Infrared",  false);
        bandPanel.add(band_ir);
-       band_opt = new JCheckBox( "Optical", true);
+       band_opt = new JCheckBox( "Optical",false);
        bandPanel.add(band_opt);
-       band_uv = new JCheckBox( "UV",  true);
+       band_uv = new JCheckBox( "UV",  false);
        bandPanel.add(band_uv);
-       band_euv = new JCheckBox( "EUV",  true);
+       band_euv = new JCheckBox( "EUV",  false);
        bandPanel.add(band_euv);
-       band_xr = new JCheckBox( "X-ray",  true);
+       band_xr = new JCheckBox( "X-ray",  false);
        bandPanel.add(band_xr);
-       band_gr = new JCheckBox( "Gamma-ray", true);
+       band_gr = new JCheckBox( "Gamma-ray", false);
        bandPanel.add(band_gr);      
        band_all = new JCheckBox( "ALL", true);
        bandPanel.add(band_all);
@@ -302,69 +321,64 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
        // Data Source
        JPanel srcAllPanel = new JPanel(new GridBagLayout());
   
-       JPanel srcPanel = new JPanel (new GridLayout(2, 3));
+       JPanel srcPanel = new JPanel (new GridLayout(3, 2));
        
    //    JPanel srcPanel = new JPanel (new GridBagLayout());
-       srcAllPanel.setBorder ( BorderFactory.createTitledBorder( "Source" ) );
+   //    srcAllPanel.setBorder ( BorderFactory.createTitledBorder( "Source" ) );
+       srcPanel.setBorder ( BorderFactory.createTitledBorder( "Source" ) );
        GridBagConstraints c = new GridBagConstraints();
        c.fill = GridBagConstraints.HORIZONTAL;
-                   
-       JCheckBox src_sur = new JCheckBox("Survey", true);
+            
+       src_sur = new JCheckBox("Survey", false);
+       srcPanel.add(src_sur);
+       src_tmod = new JCheckBox("Theory", false);
+       srcPanel.add(src_tmod);
+       src_point = new JCheckBox("Pointed", false);
+       srcPanel.add(src_point);
+       src_cust = new JCheckBox("Custom", false);
+       srcPanel.add(src_cust);
+       src_art = new JCheckBox("Artificial", false);
+       srcPanel.add(src_art);
+       src_all = new JCheckBox("ALL", true);     
+       srcPanel.add(src_all);
+       
        src_sur.setToolTipText("<html>A survey dataset, which typically covers some region of observational <br>" +
        		                   "parameter space in a uniform fashion, with as complete as possible <br>" +
        		                   "coverage in the region of parameter space observed.</html>");
-       srcPanel.add(src_sur);       
-       src_sur.setName("src_sur");
-       src_sur.addItemListener(checkBoxlistener);
-       treeRenderer.addSrc(src_sur.getText());
-       
-       JCheckBox src_tmod = new JCheckBox("Theory", true);
        src_tmod.setToolTipText("<html>Theory data, or any data generated from a theoretical model, <br>for example a synthetic spectrum.</html>");
-    
-       srcPanel.add(src_tmod);
-       src_tmod.setName("src_tmod");
-       src_tmod.addItemListener(checkBoxlistener);
-       treeRenderer.addSrc(src_tmod.getText());
-       
-       JCheckBox src_point = new JCheckBox("Pointed", true);
        src_point.setToolTipText("<html>A pointed observation of a particular astronomical object or field. <br> " +
-       		                    " Typically these are instrumental observations taken as part of some PI observing program.<br> " +
-       		                    " The data quality and characteristics may be variable, but the observations of a particular <br>" +
-       		                    " object or field may be more extensive than for a survey.</html>");
-
-       srcPanel.add(src_point);
-       src_point.setName("src_point");
-       src_point.addItemListener(checkBoxlistener);
-       treeRenderer.addSrc(src_point.getText());
-       
-       JCheckBox src_cust = new JCheckBox("Custom", true);
+               " Typically these are instrumental observations taken as part of some PI observing program.<br> " +
+               " The data quality and characteristics may be variable, but the observations of a particular <br>" +
+               " object or field may be more extensive than for a survey.</html>");
        src_cust.setToolTipText("Data which has been custom processed, e.g., as part of a specific research project.");
-    
-       srcPanel.add(src_cust);
-       src_cust.setName("src_cust");
-       src_cust.addItemListener(checkBoxlistener);
-       treeRenderer.addSrc(src_cust.getText());
-       
-       JCheckBox src_art = new JCheckBox("Artificial", true);
        src_art.setToolTipText("<html>Artificial or simulated data.  This is similar to theory data but need not be based <br>" +
-       		                    "on a physical model, and is often used for testing purposes.</html>");
- 
-       srcPanel.add(src_art);
-       src_art.setName("src_art");
-       src_art.addItemListener(checkBoxlistener);
-       treeRenderer.addSrc(src_art.getText());
-      
-       JCheckBox src_all = new JCheckBox("ALL", false);
+               "on a physical model, and is often used for testing purposes.</html>");
        src_all.setToolTipText("All servers (including the ones with no data source set)");
 
-       srcPanel.add(src_all);
+       src_sur.setName("src_sur");
+       src_tmod.setName("src_tmod");
+       src_point.setName("src_point");
+       src_cust.setName("src_cust");
+       src_art.setName("src_art");
        src_all.setName("src_all");
-       src_all.addItemListener(checkBoxlistener);
-       treeRenderer.addSrc(src_all.getText());
        
-     
-       JPanel srcPanel2 = new JPanel (new GridLayout(1, 2));
-       JCheckBox src_obs = new JCheckBox("All Observational", false);
+       src_sur.addItemListener(checkBoxlistener); 
+       src_tmod.addItemListener(checkBoxlistener);
+       src_point.addItemListener(checkBoxlistener);
+       src_cust.addItemListener(checkBoxlistener);
+       src_art.addItemListener(checkBoxlistener);
+       src_all.addItemListener(checkBoxlistener);
+       
+       treeRenderer.addSrc(src_sur.getText());
+       treeRenderer.addSrc(src_point.getText());
+       treeRenderer.addSrc(src_tmod.getText());
+       treeRenderer.addSrc(src_cust.getText());
+       treeRenderer.addSrc(src_art.getText());
+       treeRenderer.addSrc(src_all.getText());
+        
+       JPanel srcPanel2 = new JPanel (new GridLayout(2, 1));
+       srcPanel2.setBorder ( BorderFactory.createTitledBorder( "" ) );
+       src_obs = new JCheckBox("Observed data", false);
        src_obs.setToolTipText("<html>All observation servers.</html>");
       
        srcPanel2.add(src_obs);       
@@ -372,70 +386,86 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
        src_obs.addItemListener(checkBoxlistener);
        treeRenderer.addSrc(src_obs.getText());
        
-       JCheckBox src_theo = new JCheckBox("All Theoretical", false);
+       src_theo = new JCheckBox("Theoretical data", false);
        src_theo.setToolTipText("<html>All theoretical servers.</html>");
     
        srcPanel2.add(src_theo);
        src_theo.setName("src_theo");
        src_theo.addItemListener(checkBoxlistener);
        treeRenderer.addSrc(src_theo.getText());
-       
+       src_inv = new JCheckBox("Invisible"); // so I can uncheck both theo/obs if I need
        ButtonGroup group = new ButtonGroup();
        group.add(src_obs);
        group.add(src_theo);
+       group.add(src_inv);
        c.weightx=1;
        c.gridy = 0;
       
-       srcAllPanel.add( srcPanel, c);
-       c.gridy = 1;
        srcAllPanel.add( srcPanel2, c);
-       
-       optionsPanel.add(srcAllPanel);       
-       optionsPanel.add(bandPanel);
+       c.gridy = 1;
+       srcAllPanel.add( srcPanel, c);
      
-       optionTabs.addTab("Options", optionsPanel);
-     //  src_all = new JCheckBox( "ALL", true);
-     //  srcPanel.add(band_all);
+       gbcOptions.anchor = GridBagConstraints.NORTHWEST;
+       gbcOptions.fill = GridBagConstraints.HORIZONTAL;
+       gbcOptions.weightx=.5;
+       gbcOptions.weighty=0;
+       gbcOptions.gridx=0;
+       gbcOptions.gridy=0;
+     
+       optionsPanel.add(srcAllPanel,gbcOptions);
+      // gbc.anchor = GridBagConstraints.;
+       gbcOptions.weighty=1;
+       gbcOptions.gridy=1;
+       optionsPanel.add(bandPanel,gbcOptions);
+       invOptionsPanel.setLayout(new BorderLayout());
        
+       invOptionsPanel.add(optionsPanel, BorderLayout.LINE_START);
+       optionTabs.addTab("Options", invOptionsPanel);
+
        // User defined tags
        
        tagsPanel = new JPanel ();
-      // tagsPanel.setBorder ( BorderFactory.createTitledBorder( "Tags" ) );
-       tagsPanel.setLayout (new BoxLayout(tagsPanel, BoxLayout.PAGE_AXIS));
-     //  tagsPanel.setPreferredSize(optionTabs.getPreferredSize());
-       JLabel txt = new JLabel("Add tags to selected servers");
-       tagsPanel.add(txt);
+       tagsPanel.setLayout(new GridBagLayout());
+       GridBagConstraints gbcTags = new GridBagConstraints();
+       gbcTags.anchor = GridBagConstraints.NORTHWEST;
+       gbcTags.weightx=.5;
+       gbcTags.weighty=0;
+       gbcTags.gridx=0;  
+       gbcTags.gridy=0;
+       gbcTags.fill = GridBagConstraints.NONE;
+     
        JPanel tagsButtonsPanel=new JPanel();
        AddTagAction addTagAction = new AddTagAction( "Add tag" );
        JButton addTagButton = new JButton(addTagAction);
+
        addTagButton.setToolTipText("Please select servers to be tagged");
+       
        tagsButtonsPanel.add(addTagButton);
        RemoveTagAction removeTagAction = new RemoveTagAction( "Remove tag" );
        JButton removeTagButton = new JButton(removeTagAction);
-       addTagButton.setToolTipText("Please select servers to be tagged");
+     
        tagsButtonsPanel.add(removeTagButton);
-       tagsPanel.add(tagsButtonsPanel);
+     
+   
+       tagsPanel.add(tagsButtonsPanel,gbcTags);
+       tagsPanel.setBorder(BorderFactory.createTitledBorder( "Add tags to selected servers" ) );
        optionTabs.addTab("Tags", tagsPanel);
        
        tagsListModel = new DefaultListModel();
        tagsList = new JList(tagsListModel);
        ListSelectionModel selectionModel = tagsList.getSelectionModel();
        selectionModel.addListSelectionListener(new TagsListSelectionListener());
-       //tagsList.setLayout(new BoxLayout(tagsList, BoxLayout.PAGE_AXIS));
-       
-       //tagsList.setPreferredSize(tagsPanel.getPreferredSize());
-      // tagsList.setBackground(Color.WHITE);
+      
        JScrollPane tagScroller = new JScrollPane( tagsList );
-       tagScroller.setPreferredSize(new Dimension (this.WIDTH-10, this.TAB_HEIGHT-40));
-    //   tagScroller.set
-       tagsPanel.add(tagScroller);
-    //   tagScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-   //    tagScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-       
-       // 
-       
-        add(optionTabs, BorderLayout.NORTH);
-        
+   
+       gbcTags.gridx=0;  
+       gbcTags.gridy=1;
+       gbcTags.weighty=1;
+       gbcTags.weightx=1;
+     
+       gbcTags.fill=GridBagConstraints.HORIZONTAL;
+       tagsPanel.add(tagScroller,gbcTags);
+ 
         optionTabs.addChangeListener(new ChangeListener() {
             // This method is called whenever the selected tab changes
             public void stateChanged(ChangeEvent evt) {
@@ -454,8 +484,8 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         mainPanel=new JPanel();
         mainPanel.setLayout(new BorderLayout() );
         mainPanel.setBorder ( BorderFactory.createTitledBorder( "SSAP Servers" ) );
-        buttonsPanel=new JPanel();
-         
+     //   mainPanel.setPreferredSize(new Dimension(300,600));
+       
         ServerTreeNode root = new ServerTreeNode("SSAP Servers");
         populateTree(root);
       
@@ -470,36 +500,47 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
             e.printStackTrace();
         }
         model.reload();
-        serverTree.expandRow(0);
-        serverTree.updateUI();
-       // serverTree.setVisibleRowCount(30);
-     
+      //  serverTree.expandRow(0);
+    //    serverTree.updateUI();
+            
         serverTree.setCellRenderer(treeRenderer);
-  
-       // treePanel.add (new JScrollPane(serverTree));
-        mainPanel.add(new JScrollPane(serverTree), BorderLayout.NORTH);
-     
-         
-       // }
-        //  RegistryTable of servers goes into a scrollpane in the center of
-        //  window (along with a set of buttons, see initUI).
-  //      registryTable = new RegistryTable( new ResourceTableModel( true ) );
-  //      JScrollPane scroller = new JScrollPane(treePanel );
-
-   //     centrePanel.setLayout( new BorderLayout() );
-     //   centrePanel.add( scroller, BorderLayout.CENTER );
-    //    getContentPane().add( centrePanel, BorderLayout.CENTER );
-   //     centrePanel.setBorder( BorderFactory.createTitledBorder( "Servers" ) );
-        initMenus();
-        add(mainPanel, BorderLayout.CENTER);
-        add(buttonsPanel, BorderLayout.SOUTH);
+       // treeRenderer.setPreferredSize(preferredSize)
+        JScrollPane jsp = new JScrollPane(serverTree);
+    //    jsp.setViewportView(mainPanel);
+        jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
        
+        mainPanel.add(jsp, BorderLayout.NORTH);
+        
+        mainPanel.setMinimumSize(new Dimension(300,400));
+    //    mainPanel.setPreferredSize(new Dimension(400,400));
+        optionTabs.setMinimumSize(new Dimension(200,400));
+        //optionTabs.setPreferredSize(new Dimension(400,400));
+        initMenus();
+      
+        optionsScroller.getViewport().add( optionTabs, null );
+        optionsScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        JSplitPane splitPanel = new JSplitPane();
+        splitPanel.setOneTouchExpandable(true);
+        splitPanel.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+        splitPanel.setDividerLocation(0.8);
+      
+        splitPanel.setLeftComponent(mainPanel);
+        splitPanel.setRightComponent(optionsScroller);
+       
+        this.add(splitPanel);
+        
     }
 
-    public void adaptTreeHeight(int heigth) {
-        int maxHeight = heigth - buttonsPanel.getHeight() - controlPanel.getHeight();
+    public void adaptTreeHeight() {
+        int maxHeight = HEIGHT -  controlPanel.getHeight() - 40;
+    
+        logger.info( "ROWHEIGHT " + serverTree.getRowHeight() + " MAX "+ maxHeight);
+        
         if (maxHeight > 0)
             serverTree.setVisibleRowCount((int) (serverTree.getRowHeight()/maxHeight));
+       
+        
     }
     
     /**
@@ -514,25 +555,16 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         while( i.hasNext()) {
             SSAPRegResource server= (SSAPRegResource) i.next(); 
             String name = server.getShortName();
-    //        if (name == null || name.length() == 0)
-    //            name = "<>" ;
-    //        ServerTreeNode stn = new ServerTreeNode( name  ); 
+  
             SSAPRegCapability caps[] = server.getCapabilities();
- /* 
-            int nrssacaps=0;
-            for (int c=0; c< server.getCapabilities().length; c++){
-              //  SSAPRegCapability cap = server.getCapabilities()[c];
-                String xsi= caps[c].getXsiType();
-                if (xsi != null && xsi.startsWith("ssa")) {*/
+
                     ServerTreeNode stn = new ServerTreeNode( name  ); 
-                  //  addInfoNodes(server, caps[c], nrssacaps, stn);
+                
                     addInfoNodes(server, caps[0], stn);
                     if (stn.isSelected())
                         serverList.selectServer(server.getShortName());
                     root.addsort( stn );
-                 //   nrssacaps++;
-              /*  }
-            }*/
+                 
          }
     }
     
@@ -541,7 +573,6 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
      *
      * @param serverList the SSAServerList reference.
      */
-//    private void addInfoNodes ( SSAPRegResource server, SSAPRegCapability cap, int capnr, ServerTreeNode servernode )
     private void addInfoNodes ( SSAPRegResource server, SSAPRegCapability cap, ServerTreeNode servernode )
     {      
     
@@ -557,15 +588,6 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
          
             servernode.add( new ServerTreeNode( "Waveband: " + Arrays.toString(server.getWaveband())));
             
-      //      servernode.add( new ServerTreeNode( "Version: " + server.getVersion()));
-            
-            // get the right capability      
-        //    SSAPRegCapability caps[] = server.getCapabilities();
-        //    SSAPRegCapability cap=null;
-       //     for (int i=0; i< caps.length; i++){
-    //            SSAPRegCapability c = server.getCapabilities()[i];
-   //             if (c.getXsiType().equals("ssa:SimpleSpectralAccess"))
-  //          }
             ServerTreeNode capnode = new ServerTreeNode( "Capability" );
             capnode.add( new ServerTreeNode( "Access URL: " + cap.getAccessUrl() ));
             capnode.add( new ServerTreeNode( "Description: " + cap.getDescription() )); 
@@ -577,16 +599,10 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
             capnode.add( new ServerTreeNode( "Version: " + cap.getVersion() )); 
             capnode.add( new ServerTreeNode( "XSI Type: " + cap.getXsiType() ));   
            
-         
-      //      if (capnr > 0)
-       //         servernode.setUserObject((String) servernode.getUserObject() + "("+ capnr + ")"+"       [" + server.getTitle() + "]");
-       //     else 
-                servernode.setUserObject((String) servernode.getUserObject() + "       [" + server.getTitle() + "]");
+            servernode.setUserObject((String) servernode.getUserObject() + "       [" + server.getTitle() + "]");
 
-         //   servernode.setUserObject((String) servernode.getUserObject() + "       [" + cap.getDataSource() + "]" +"["+ cap.getDataType() + "]") ;
-            
        
-           logger.info( server.getShortName()+":" + Arrays.toString(server.getWaveband())+":"+cap.getDataSource()+":"+cap.getDataType()+":"+cap.getCreationType()+":"+cap.getAccessUrl()+":"+server.getContact() );
+            logger.info( server.getShortName()+":" + Arrays.toString(server.getWaveband())+":"+cap.getDataSource()+":"+cap.getDataType()+":"+cap.getCreationType()+":"+cap.getAccessUrl()+":"+server.getContact() );
            
             ArrayList<String> params = serverParam.getParams(server.getShortName());
             if ( params != null ) {
@@ -606,19 +622,12 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
     protected void initMenus()
     {
  
-        //  Action bars use BoxLayouts.
+       //  Action bars use BoxLayouts.
         
-      // setBorder( BorderFactory.createTitledBorder( "Servers" ) );
-       controlPanel = new JPanel( new BorderLayout() );
+       controlPanel = new JPanel( );
+     //  controlPanel.setPreferredSize(new Dimension(mainPanel.getWidth(),this.BUTTONS_HEIGHT));
        JPanel topActionBar1 = new JPanel();
        JPanel topActionBar2 = new JPanel();
-       JPanel topActionBar3 = new JPanel();
-      // topActionBar1.setLayout(new BoxLayout(topActionBar1, BoxLayout.Y_AXIS));
-      //  topActionBar.setBorder(BorderFactory.createEmptyBorder( 3, 3, 3, 3 ));
-
-  // botActionBar = new JPanel();
-      //  botActionBar.setLayout(new BoxLayout(botActionBar, BoxLayout.X_AXIS));
-     //   botActionBar.setBorder(BorderFactory.createEmptyBorder( 3, 3, 3, 3 ));
 
         //  Get icons.
         Icon closeImage =
@@ -647,23 +656,7 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
 //        botActionBar.add( saveButton );
         saveButton.setToolTipText( "Save server list to a disk-file" );
 
-        //  Add an action to close the window.
-   //     CloseAction closeAction = new CloseAction( "Close", closeImage );
-//        fileMenu.add( closeAction ).setMnemonic( KeyEvent.VK_C );
 
-    //    JButton closeButton = new JButton( closeAction );
-   //     botActionBar.add( Box.createGlue() );
-    //    botActionBar.add( closeButton );
-    //    closeButton.setToolTipText( "Close window" );
-
-
-        //  Configure the proxy server.
-        ProxyAction proxyAction =
-            new ProxyAction( "Configure connection proxy..." );
-  //      optionsMenu.add( proxyAction );
-
-     
- 
         //  Add action to manually add a new server to the list
    //     AddNewAction addNewAction = new AddNewAction( "New Server" );
  //       fileMenu.add( addNewAction );
@@ -684,18 +677,6 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
         removeButton.setToolTipText
             ( "Remove selected servers from current list" );
 
-        //  Remove all but the selected servers from table.
-        RemoveUnAction removeUnAction = 
-          new RemoveUnAction( "Remove unselected" );
- //       optionsMenu.add( removeUnAction );
-        JButton removeUnButton = new JButton( removeUnAction );
-        removeUnButton.setMargin(new Insets(2,2,2,2));  
- //       topActionBar.add( Box.createGlue() );
-        topActionBar1.add( removeUnButton );
-     //   controlPanel.add( removeUnButton, BorderLayout.CENTER );
-        removeUnButton.setToolTipText
-            ( "Remove unselected servers from current list" );
-        
         //  Action to check a registry for additional/updated servers.
         QueryNewAction newAction = new QueryNewAction( "Query registry" );
    //     optionsMenu.add( newAction );
@@ -738,21 +719,12 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
       //  topActionBar.add( Box.createGlue() );
    //     botActionBar.add( Box.createGlue() );
 
-          controlPanel.add(topActionBar1, BorderLayout.NORTH);
+          controlPanel.add(topActionBar1);//, BorderLayout.NORTH);
   //      controlPanel.add(topActionBar3, BorderLayout.CENTER);
-          controlPanel.add(topActionBar2, BorderLayout.SOUTH);
-        mainPanel.add( controlPanel, BorderLayout.SOUTH );
-     //   buttonsPanel.add( botActionBar, BorderLayout.SOUTH );
-
-        //  Add a Column menu that allows the choice of which registry
-        //  query columns to show.
-       // JMenu columnsMenu = makeColumnVisibilityMenu( "Columns" );
-     //   columnsMenu.setMnemonic( KeyEvent.VK_L );
-     //   menuBar.add( columnsMenu );
-
-        //  Create the Help menu.
-    //    HelpFrame.createHelpMenu( "ssap-server-window", "Help on window",
-    //                              menuBar, null );
+          controlPanel.add(topActionBar2);//, BorderLayout.SOUTH);
+     
+          mainPanel.add(controlPanel);
+    
     }
 
  
@@ -1105,7 +1077,7 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
                     SSAPRegResource server = (SSAPRegResource)resources[i];
                     String shortname = server.getShortName();
                     if (shortname == null || shortname.length()==0)
-                        shortname = "<>"; // avoid problems if server has no name (should not happen!!!)
+                        shortname = server.getTitle(); // avoid problems if server has no name (should not happen, but it does!!!)
                     SSAPRegCapability caps[] = server.getCapabilities();
                     int nrcaps = server.getCapabilities().length;
                     int nrssacaps=0;
@@ -1771,45 +1743,98 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
                 JCheckBox source = (JCheckBox) e.getItemSelectable();
                 String src = source.getText(); 
                 String name = source.getName();
+            
 
                 if (e.getStateChange() == ItemEvent.SELECTED) {  
                  //   if (name.startsWith("tag") ) {
                  //       treeRenderer.addTag(src);                       
                  //   } else  
                     if (name.startsWith("src") ) {
-                        if (src.equals("ALL"))
+                        if (src.equals("ALL")) {
                             treeRenderer.setAllSources(true);
-                        else  if (src.equals("All Observational")) {
+                            src_sur.setSelected(false);
+                            src_tmod.setSelected(false);
+                            src_point.setSelected(false);
+                            src_cust.setSelected(false);
+                            src_art.setSelected(false);
+                            src_obs.setSelected(false);
+                            src_theo.setSelected(false);
+                            src_inv.setSelected(true);
+                          
+                        }
+                        else  if (src.equals("Observed data")) {                              
+                            treeRenderer.setAllSources(false);
+                            src_sur.setSelected(false);
+                            src_tmod.setSelected(false);
+                            src_point.setSelected(false);
+                            src_cust.setSelected(false);
+                            src_art.setSelected(false);
+                            src_all.setSelected(false);
                             treeRenderer.setAllObsSources(true);                           
                         }
-                        else if (src.equals("All Theoretical")) {
+                        else if (src.equals("Theoretical data")) {
+                            src_sur.setSelected(false);
+                            src_tmod.setSelected(false);
+                            src_point.setSelected(false);
+                            src_cust.setSelected(false);
+                            src_art.setSelected(false);
+                            src_all.setSelected(false);
+                            treeRenderer.setAllSources(false);
                             treeRenderer.setAllTheoSources(true);
                         }
-                        else 
-                            treeRenderer.addSrc(src);                       
+                        else {
+                            src_theo.setSelected(false);
+                            src_obs.setSelected(false);
+                            src_inv.setSelected(true);
+                            src_all.setSelected(false);
+                            treeRenderer.addSrc(src);     
+                        }
                     } else { // band
-                        if (src.equals("ALL"))
+                        if (src.equals("ALL")) {
                             treeRenderer.setAllBands(true);
-                        else treeRenderer.addBand(src);
+                            band_rad.setSelected(false);
+                            band_mm.setSelected(false);
+                            band_opt.setSelected(false);
+                            band_ir.setSelected(false);
+                            band_uv.setSelected(false);
+                            band_euv.setSelected(false);
+                            band_xr.setSelected(false);
+                            band_gr.setSelected(false); 
+                        }    
+                        else {
+                            treeRenderer.addBand(src);
+                            band_all.setSelected(false);
+                        }
                     }
                 }
                 else if (e.getStateChange() == ItemEvent.DESELECTED) {
                     if (name.startsWith("tag")) {
                         treeRenderer.removeTag(src);                       
                     } else if (name.startsWith("src")) {
-                        if (src.equals("ALL"))
+                        if (src.equals("ALL")) { // deselect ALL : 
+                            src_theo.setSelected(false);
+                            src_obs.setSelected(false);
+                            src_inv.setSelected(true);
                             treeRenderer.setAllSources(false);
-                        else   if (src.equals("All Observational"))
+                        }
+                        else   if (src.equals("Observed data")) {
+                           
                             treeRenderer.setAllObsSources(false);
-                        else if (src.equals("All Theoretical")) 
+                        }
+                        else if (src.equals("Theoretical data")) {
+                           
                             treeRenderer.setAllTheoSources(false);
-                        else 
+                        }
+                        else {
+                            src_theo.setSelected(false);
+                            src_obs.setSelected(false);
                             treeRenderer.removeSrc(src); 
+                        }
                     } else {
                         
                         if (src.equals("ALL"))
                             treeRenderer.setAllBands(false);
-                        else
+                        else 
                             treeRenderer.removeBand(src);    
                    }
                       
@@ -1841,4 +1866,9 @@ public class SSAServerTree extends JPanel  implements PropertyChangeListener {
             } // valueChanged
     } // TagsListSelectionListener
 
+    class resizeListener extends ComponentAdapter {
+        public void componentResized(ComponentEvent e) {
+            updateUI();
+        }
+    }
 }

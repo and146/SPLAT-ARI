@@ -676,7 +676,8 @@ public class SpecDataFactory
                   //  DataSource datsrc = new FileDataSource( specfile , "1");
                     DataSource datsrc = new FileDataSource( specspec );
                     StarTable starTable = new FitsTableBuilder().makeStarTable( datsrc, true, storagePolicy );
-                    impl = new TableSpecDataImpl( starTable, specspec, datsrc.getURL().toString() );
+                    impl = new TableSpecDataImpl( starTable, specspec, datsrc.getURL().toString(),
+                    		((FITSSpecDataImpl)impl).getFitsHeaders());
                 }
                 catch (SEDSplatException se) {
                     se.setType(FITS);
@@ -688,7 +689,15 @@ public class SpecDataFactory
                 }
             }
             
-            specDataImpls.add(impl);
+            /* add only if data array size is not 0 
+             * (we can do this since we loop over all
+             * found HDUs so any relevant, non-zero HDUs
+             * will be treated correctly)
+             */
+            if (dims == null || (dims !=null && dims[0] != 0))
+            	specDataImpls.add(impl);
+            else
+            	logger.info(String.format("Ignoring HDU #%d in '%s' (data array size 0)", i, impl.getFullName()));
     	}
         
         return specDataImpls;

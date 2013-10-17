@@ -84,7 +84,7 @@ public class MEMSpecDataImpl
 
         //  Record any source of header information.
         if ( spectrum.getSpecDataImpl().isFITSHeaderSource() ) {
-            headers =
+        	headers =
                ((FITSHeaderSource)spectrum.getSpecDataImpl()).getFitsHeaders();
         }
 

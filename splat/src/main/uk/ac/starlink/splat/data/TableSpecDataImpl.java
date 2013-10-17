@@ -8,9 +8,10 @@
  */
 package uk.ac.starlink.splat.data;
 
-import java.util.List;
 import java.io.IOException;
+import java.util.List;
 
+import nom.tam.fits.Header;
 import uk.ac.starlink.ast.FrameSet;
 import uk.ac.starlink.splat.util.SEDSplatException;
 import uk.ac.starlink.splat.util.SplatException;
@@ -140,10 +141,26 @@ public class TableSpecDataImpl
                               String fullName )
         throws SplatException
     {
+        this(starTable, shortName, fullName, null);
+    }
+    
+    /**
+     * Create an object by reusing an existing instance if StarTable.
+     *
+     * @param starTable reference to a {@link StarTable}.
+     * @param shortName a short name for the table.
+     * @param fullName a long name for the table.
+     * @param fitsHeaders original FITS headers that will be used if no accumulated
+     */
+    public TableSpecDataImpl( StarTable starTable, String shortName,
+                              String fullName, Header fitsHeaders )
+        throws SplatException
+    {
         super( shortName );
         openTable( starTable );
         this.shortName = shortName;
         this.fullName = fullName;
+        this.originalFitsHeaders = fitsHeaders;
     }
 
     /**
@@ -266,6 +283,18 @@ public class TableSpecDataImpl
         return writer.getKnownFormats();
     }
 
+    @Override
+    public Header getFitsHeaders() {
+    	Header accumulatedHeaders = super.getFitsHeaders();
+    	// if no (or empty) accumulated headers, return the original headers (if any)
+    	if (accumulatedHeaders != null
+    			&& accumulatedHeaders.getDataSize() == 0
+    			&& originalFitsHeaders != null) {
+    		return originalFitsHeaders;
+    	}
+    	return accumulatedHeaders;
+    }
+    
     //
     // Implementation specific methods and variables.
     //
@@ -275,6 +304,11 @@ public class TableSpecDataImpl
      */
     protected StarTable starTable = null;
 
+    /**
+     * Reference to the original FITS headers of the input FITS file.
+     */
+    protected Header originalFitsHeaders = null;
+    
     /**
      * Writer for tables.
      */

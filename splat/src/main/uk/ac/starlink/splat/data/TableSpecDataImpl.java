@@ -70,7 +70,8 @@ public class TableSpecDataImpl
     /**
      * Create an object by opening a resource and reading its
      * content. Note this throws a SEDSplatException, if the table is
-     * suspected of being an SED (that is it contain vector cells).
+     * suspected of being an SED (that is it contain vector cells)
+     * with more than one row.
      *
      * @param tablespec the name of the resource (file plus optional fragment).
      */
@@ -204,9 +205,16 @@ public class TableSpecDataImpl
     {
         for ( int i = 0; i < columnNames.length; i++ ) {
             if ( columnNames[i].equals( name ) ) {
+               
                 if ( coordColumn != i ) {
                     coordColumn = i;
-                    readColumn( coords, coordColumn );
+                    long nrrows = starTable.getRowCount();
+                    if (nrrows==1) {
+                        coords = readCell( 0, coordColumn );
+                       
+                    } else {
+                         readColumn( coords, coordColumn );
+                   }
                     createAst();
                 }
                 break;
@@ -226,7 +234,13 @@ public class TableSpecDataImpl
             if ( columnNames[i].equals( name ) ) {
                 if ( dataColumn != i ) {
                     dataColumn = i;
-                    readColumn( data, dataColumn );
+                    long nrrows = starTable.getRowCount();
+                    if (nrrows==1) {
+                        data = readCell( 0, dataColumn );
+                        
+                    } else {
+                        readColumn( data, dataColumn );  
+                   }
                     createAst();
                 }
                 break;
@@ -257,8 +271,14 @@ public class TableSpecDataImpl
                         errorColumn = i;
                         if ( errors == null && ! name.equals( "" ) ) {
                             errors = new double[dims[0]];
+                        } 
+                        long nrrows = starTable.getRowCount();
+                        if (nrrows==1) {                     
+                                errors = readCell( 0, errorColumn );
+                        } else {
+                       
+                            readColumn( errors, errorColumn );
                         }
-                        readColumn( errors, errorColumn );
                     }
                     break;
                 }
@@ -719,11 +739,21 @@ public class TableSpecDataImpl
         catch (ClassCastException e) {
             //  Isn't a Number, is it a vector?
             if ( isPrimitiveArray( cellData ) ) {
-                throw new SEDSplatException( dims[0], 
-                      "Table contains vector cells, assuming it is an SED" );
+                
+                if (starTable.getRowCount()==1) {
+                                    
+                    //  Read vector data from first row. XXX handle SED.
+                    double newdata[] = readCell( 0, index );
+                    System.arraycopy( newdata, 0, data, 0, newdata.length );
+                } else {
+                    throw new SEDSplatException( dims[0], 
+                    "Table contains vector cells, assuming it is an SED" );
+                }
             }
-            throw new SplatException
-                ( "Table column ("+ index +")contains an unknown data type" );
+            else {
+                throw new SplatException
+                    ( "Table column ("+ index +")contains an unknown data type" );
+            }
         }
         catch (Exception e) {
             throw new SplatException( "Failed reading table column" , e );
@@ -817,7 +847,10 @@ public class TableSpecDataImpl
             desc = columnInfos[column].getUCD();
             if ( desc != null ) {
                 UCD ucd = UCD.getUCD( desc );
-                if ( ucd != null ) {
+                if ( ucd == null ) {
+                    desc = null;
+                }
+                else {
                     desc = ucd.getDescription();
                 }
             }
@@ -825,6 +858,7 @@ public class TableSpecDataImpl
                 desc = columnInfos[column].getName();
             }
         }
+
         if ( desc != null && ! "".equals( desc ) ) {
             astref.setLabel( 1, desc );
         }

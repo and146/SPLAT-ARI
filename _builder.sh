@@ -222,12 +222,13 @@ fi
 echo Building ...
 if [ $ENABLE_LOG == true ]
 then
-	ant -Dfile.encoding=iso-8859-1 build > `echo $SPLAT_BUILD_LOG`
+	ant -Dfile.encoding=iso-8859-1 `echo $TASK` > `echo $SPLAT_BUILD_LOG`
 else
-	ant -Dfile.encoding=iso-8859-1 build
+	ant -Dfile.encoding=iso-8859-1 `echo $TASK`
 fi
 # STARJAVA Installation part
 # FIX this is awful and buggy...
+
 echo Installing ...
 STARJAVA_INST_DIR=../$STARJAVA_INST_DIR_BASE
 if [ "$SUBPROJ" != "" ]
